@@ -31,8 +31,10 @@ export async function POST(request: NextRequest) {
     const { username, password, captchaToken, captchaAnswer } = parseResult.data;
 
     // Real Captcha Security Enforcement
-    const isTestBypass = request.headers.get('x-test-bypass') === 'true';
-    if (!isTestBypass && captchaToken !== 'test-bypass-token') {
+    const isTestEnv = process.env.NODE_ENV === 'test';
+    const isTestBypass = isTestEnv && request.headers.get('x-test-bypass') === 'true';
+
+    if (!isTestBypass) {
       if (!captchaToken || !captchaAnswer) {
         return NextResponse.json(
           { error: 'Human verification required. Please complete the security check.' },

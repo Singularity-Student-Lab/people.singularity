@@ -108,9 +108,11 @@ export function generateCaptcha(): CaptchaChallenge {
 export function verifyCaptcha(token?: string | null, answer?: string | null): boolean {
   if (!token || !answer) return false;
 
-  // Local development / automated testing bypass token
-  if (token === 'test-bypass-token' || token === 'test-token-passed') {
-    return true;
+  // Automated testing bypass ONLY when explicitly running in test environment
+  if (process.env.NODE_ENV === 'test') {
+    if (token === 'test-bypass-token' || token === 'test-token-passed') {
+      return true;
+    }
   }
 
   try {

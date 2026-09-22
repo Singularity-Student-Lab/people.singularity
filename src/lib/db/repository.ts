@@ -85,7 +85,7 @@ function saveLocalStore(store: DatabaseStore) {
 }
 
 // Check whether database port is open before asking Prisma
-function isDatabaseReachable(timeoutMs = 400): Promise<boolean> {
+function isDatabaseReachable(timeoutMs?: number): Promise<boolean> {
   return new Promise((resolve) => {
     try {
       const dbUrl = process.env.DATABASE_URL;
@@ -105,8 +105,11 @@ function isDatabaseReachable(timeoutMs = 400): Promise<boolean> {
         }
       }
 
+      const isRemote = host !== 'localhost' && host !== '127.0.0.1';
+      const actualTimeout = timeoutMs ?? (isRemote ? 3500 : 600);
+
       const socket = new net.Socket();
-      socket.setTimeout(timeoutMs);
+      socket.setTimeout(actualTimeout);
       socket.once('connect', () => {
         socket.destroy();
         resolve(true);
@@ -128,26 +131,41 @@ function isDatabaseReachable(timeoutMs = 400): Promise<boolean> {
 
 // Check whether Prisma can connect to PostgreSQL
 let isPrismaAvailable: boolean | null = null;
+let lastPrismaCheck = 0;
+const PRISMA_RETRY_INTERVAL_MS = 10000; // Re-evaluate connection every 10s if initially unavailable
 
 async function checkPrisma(): Promise<boolean> {
-  if (isPrismaAvailable !== null) return isPrismaAvailable;
+  if (isPrismaAvailable === true) return true;
 
-  // First verify port is reachable before calling Prisma query engine
-  const reachable = await isDatabaseReachable(300);
+  const now = Date.now();
+  if (isPrismaAvailable === false && now - lastPrismaCheck < PRISMA_RETRY_INTERVAL_MS) {
+    return false;
+  }
+
+  lastPrismaCheck = now;
+
+  if (!process.env.DATABASE_URL) {
+    isPrismaAvailable = false;
+    return false;
+  }
+
+  // Verify host port is reachable first
+  const reachable = await isDatabaseReachable();
   if (!reachable) {
     isPrismaAvailable = false;
     return false;
   }
 
   try {
-    // Quick test query with timeout
+    // Quick test query with resilient 4s timeout for cloud databases
     await Promise.race([
       prisma.$queryRaw`SELECT 1`,
-      new Promise((_, reject) => setTimeout(() => reject(new Error('Prisma connection timeout')), 1500)),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('Prisma connection timeout')), 4000)),
     ]);
     isPrismaAvailable = true;
     return true;
-  } catch {
+  } catch (err) {
+    console.warn('[Repository] PostgreSQL connection attempt failed, using local resilient store.', err instanceof Error ? err.message : String(err));
     isPrismaAvailable = false;
     return false;
   }

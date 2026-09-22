@@ -5,6 +5,16 @@ import { fetchGitHubActivity } from '@/lib/github/fetch-contributions';
 import { MemberPortfolioTemplate } from '@/components/portfolio/MemberPortfolioTemplate';
 
 export const revalidate = 3600; // ISR revalidate every hour
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+  try {
+    const members = await db.findActiveMembers();
+    return members.map((m) => ({ slug: m.slug }));
+  } catch {
+    return [];
+  }
+}
 
 interface PageProps {
   params: Promise<{ slug: string }>;

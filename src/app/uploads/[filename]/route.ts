@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import os from 'os';
 
 const MIME_MAP: Record<string, string> = {
   '.png': 'image/png',
@@ -24,15 +25,22 @@ export async function GET(
     }
 
     const uploadsDir = path.resolve(process.cwd(), 'public', 'uploads');
-    const filePath = path.resolve(uploadsDir, filename);
+    let filePath = path.resolve(uploadsDir, filename);
 
-    // Path traversal defense
+    // Path traversal defense for primary uploads directory
     if (!filePath.startsWith(uploadsDir)) {
       return NextResponse.json({ error: 'Access denied' }, { status: 403 });
     }
 
     if (!fs.existsSync(filePath)) {
-      return NextResponse.json({ error: 'File not found' }, { status: 404 });
+      // Serverless fallback check in OS temp directory
+      const tmpUploadsDir = path.resolve(os.tmpdir(), 'uploads');
+      const tmpFilePath = path.resolve(tmpUploadsDir, filename);
+      if (tmpFilePath.startsWith(tmpUploadsDir) && fs.existsSync(tmpFilePath)) {
+        filePath = tmpFilePath;
+      } else {
+        return NextResponse.json({ error: 'File not found' }, { status: 404 });
+      }
     }
 
     const ext = path.extname(filename).toLowerCase();

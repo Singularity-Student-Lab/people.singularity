@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
+import os from 'os';
 
 const UPLOADS_DIR = path.join(process.cwd(), 'public', 'uploads');
 
@@ -9,6 +10,24 @@ export interface UploadValidationResult {
   error?: string;
   url?: string;
   filename?: string;
+}
+
+async function saveUploadFile(safeFilename: string, buffer: Buffer): Promise<void> {
+  try {
+    if (!fs.existsSync(UPLOADS_DIR)) {
+      fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+    }
+    const filePath = path.join(UPLOADS_DIR, safeFilename);
+    await fs.promises.writeFile(filePath, buffer);
+  } catch {
+    // If running in a read-only serverless filesystem (e.g., Vercel Lambda), fallback to writable OS temp directory
+    const tmpUploadsDir = path.join(os.tmpdir(), 'uploads');
+    if (!fs.existsSync(tmpUploadsDir)) {
+      fs.mkdirSync(tmpUploadsDir, { recursive: true });
+    }
+    const tmpFilePath = path.join(tmpUploadsDir, safeFilename);
+    await fs.promises.writeFile(tmpFilePath, buffer);
+  }
 }
 
 /**
@@ -54,13 +73,7 @@ export async function processImageUpload(
 
   // Generate cryptographic UUID filename (path traversal immune)
   const safeFilename = `avatar-${crypto.randomUUID()}${extension}`;
-
-  if (!fs.existsSync(UPLOADS_DIR)) {
-    fs.mkdirSync(UPLOADS_DIR, { recursive: true });
-  }
-
-  const filePath = path.join(UPLOADS_DIR, safeFilename);
-  await fs.promises.writeFile(filePath, buffer);
+  await saveUploadFile(safeFilename, buffer);
 
   return {
     valid: true,
@@ -105,13 +118,7 @@ export async function processPdfResumeUpload(
   }
 
   const safeFilename = `resume-${crypto.randomUUID()}.pdf`;
-
-  if (!fs.existsSync(UPLOADS_DIR)) {
-    fs.mkdirSync(UPLOADS_DIR, { recursive: true });
-  }
-
-  const filePath = path.join(UPLOADS_DIR, safeFilename);
-  await fs.promises.writeFile(filePath, buffer);
+  await saveUploadFile(safeFilename, buffer);
 
   return {
     valid: true,

@@ -68,7 +68,7 @@ export async function middleware(request: NextRequest) {
     style-src 'self' 'unsafe-inline';
     img-src 'self' data: https: blob:;
     font-src 'self' data: https:;
-    connect-src 'self' https://api.github.com;
+    connect-src 'self' https://api.github.com https://*.supabase.co;
     frame-ancestors 'none';
     form-action 'self';
     base-uri 'self';
