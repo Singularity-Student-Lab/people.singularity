@@ -39,11 +39,12 @@ const siteUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://singularity.space.ed
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'Singularity Student Lab — Member Directory & Portfolios',
+    default: 'Singularity People — Singularity Student Lab',
     template: '%s — Singularity Student Lab',
   },
   description: 'Directory and verified member portfolio platform of the Singularity Student Lab, SRM University AP.',
   keywords: [
+    'Singularity People',
     'Singularity Student Lab',
     'SRM University AP',
     'Student Portfolios',
@@ -58,7 +59,7 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: siteUrl,
     siteName: 'Singularity Student Lab',
-    title: 'Singularity Student Lab — Member Directory & Portfolios',
+    title: 'Singularity People — Singularity Student Lab',
     description: 'Directory and verified member portfolio platform of the Singularity Student Lab, SRM University AP.',
     images: [
       {
@@ -71,16 +72,18 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary',
-    title: 'Singularity Student Lab',
+    title: 'Singularity People — Singularity Student Lab',
     description: 'Directory and verified member portfolio platform of the Singularity Student Lab, SRM University AP.',
     images: ['/singularity_logo.webp'],
   },
   icons: {
     icon: [
+      { url: '/icon.png', type: 'image/png' },
       { url: '/favicon.ico' },
-      { url: '/icon.webp', type: 'image/webp' },
+      { url: '/singularity_logo.webp', type: 'image/webp' },
     ],
-    apple: [{ url: '/singularity_logo.webp' }],
+    shortcut: ['/favicon.ico'],
+    apple: [{ url: '/apple-icon.png' }, { url: '/singularity_logo.webp' }],
   },
 };
 

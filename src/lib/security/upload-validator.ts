@@ -21,20 +21,25 @@ async function saveUpload(
   buffer: Buffer,
   contentType: string
 ): Promise<{ url: string; filename: string }> {
-  // Support standard BLOB_READ_WRITE_TOKEN or any custom prefix (e.g. VERCEL_BLOB_READ_WRITE_TOKEN, MEDIA_BLOB_READ_WRITE_TOKEN)
+  // Support real connected blob token (filters out any dummy placeholder strings from .env.example)
+  const isValidBlobToken = (t?: string) => Boolean(t && !t.includes('xxxxxxxx') && !t.includes('[YOUR_'));
+
   const findDynamicBlobToken = (): string | undefined => {
     for (const key of Object.keys(process.env)) {
-      if (key.endsWith('_READ_WRITE_TOKEN') && process.env[key]) {
+      if (key.endsWith('_READ_WRITE_TOKEN') && isValidBlobToken(process.env[key])) {
         return process.env[key];
       }
     }
     return undefined;
   };
 
-  const blobToken =
-    process.env.BLOB_READ_WRITE_TOKEN ||
-    process.env.VERCEL_BLOB_READ_WRITE_TOKEN ||
-    findDynamicBlobToken();
+  const rawTokens = [
+    process.env.MEDIA_BLOB_READ_WRITE_TOKEN,
+    process.env.VERCEL_BLOB_READ_WRITE_TOKEN,
+    process.env.BLOB_READ_WRITE_TOKEN,
+  ];
+
+  const blobToken = rawTokens.find(isValidBlobToken) || findDynamicBlobToken();
 
   if (blobToken) {
     const blob = await put(pathname, buffer, {

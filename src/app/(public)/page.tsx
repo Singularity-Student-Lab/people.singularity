@@ -5,7 +5,7 @@ import { MembersDirectoryClient } from './members/MembersDirectoryClient';
 import { PublicNavbar } from '@/components/navigation/PublicNavbar';
 
 export const metadata: Metadata = {
-  title: 'Directory — Singularity Student Lab',
+  title: 'Singularity People — Singularity Student Lab',
   description: 'Student members and builders at the Singularity Student Lab, SRM University AP.',
 };
 
