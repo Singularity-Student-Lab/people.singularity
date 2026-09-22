@@ -16,7 +16,7 @@
       "passwordHash": "$2b$12$L1RkH5m9ruwpmHJCZM3f5ePrCNkSKg61tL1NuRQUtlrLbl23KXRti",
       "fullName": "YUVRAJ SINGH",
       "title": "BHASKARACHRYA EXECUTIVE",
-      "bio": "B.Tech CS student at SRM University AP with experience in full-stack development, open-source contribution, and cybersecurity. \nHackathon finalist at national-level competitions. Ranked Top 15 Campus Ambassador nationwide at IIT Guwahati E-Cell. Active \nmember of IEEE Student Branch and Singularity Student Lab.",
+      "bio": "B.Tech CSE student at SRM University AP focused on full-stack development, Web3, and cybersecurity. Builds production-oriented web\napplications with React, Next.js, TypeScript, Node.js, and PostgreSQL, while developing skills in Solidity and blockchain. Active in student\ntechnology communities through technical leadership, open-source work, and research-focused collaboration.",
       "bioHighlights": [],
       "bookCallUrl": null,
       "email": null,
@@ -24,7 +24,7 @@
       "twitter": "https://x.com/Yuvraj_Singh317",
       "linkedin": "https://www.linkedin.com/in/yuvraj-singh-3178saturn/",
       "discord": null,
-      "resumeUrl": "/uploads/resume-d9fafa21-05c0-4ba4-b44f-434b32bd270f.pdf",
+      "resumeUrl": "/uploads/resume-b417543a-98e6-4d84-9df0-1869b9e573d7.pdf",
       "profileImageUrl": "/uploads/avatar-f1d8d8f4-0ed6-4a66-b95e-1aaa0c2e6848.png",
       "githubUsername": "YUVRAJ-SINGH-3178",
       "closingQuote": null,
@@ -35,7 +35,7 @@
       "lockedUntil": null,
       "tokenVersion": 4,
       "createdAt": "2026-09-21T19:35:41.672Z",
-      "updatedAt": "2026-09-21T19:51:43.807Z"
+      "updatedAt": "2026-09-22T13:49:32.731Z"
     }
   ],
   "experiences": [
@@ -47,7 +47,7 @@
       "location": "SRM University AP",
       "startDate": "2026",
       "endDate": null,
-      "description": "",
+      "description": "- Working with the lab's interim leadership on technical direction, member coordination, and research-oriented initiatives.\n- Contributing to the growth and visibility of a new student research community focused on emerging technologies.",
       "sortOrder": 0
     },
     {
@@ -58,8 +58,19 @@
       "location": "SRM University AP",
       "startDate": "2026",
       "endDate": null,
-      "description": "",
+      "description": "- Contributing to the student community's web and technical initiatives, including development and maintenance of its website.\n- Supporting technical execution and collaborating with members on web-development initiatives and community projects.",
       "sortOrder": 1
+    },
+    {
+      "id": "exp-1790084823499",
+      "memberId": "member-1790019341672",
+      "title": "Technical Wing Member",
+      "org": "IEEE",
+      "location": "SRM University AP",
+      "startDate": "March 2026",
+      "endDate": "September 2026",
+      "description": "Contributed to technical projects, website work, workshops, and knowledge-sharing initiatives",
+      "sortOrder": 2
     }
   ],
   "projects": [
@@ -376,6 +387,50 @@
     }
   ],
   "auditLogs": [
+    {
+      "id": "audit-1790085064134-desr",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "LOGOUT",
+      "targetType": "Session",
+      "targetId": null,
+      "ipAddress": null,
+      "metadata": null,
+      "createdAt": "2026-09-22T13:51:04.134Z"
+    },
+    {
+      "id": "audit-1790084972740-asqa",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "PROFILE_UPDATED",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": null,
+      "metadata": null,
+      "createdAt": "2026-09-22T13:49:32.740Z"
+    },
+    {
+      "id": "audit-1790084790633-humu",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "RESUME_UPLOADED",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": null,
+      "metadata": "{\"filename\":\"resume-b417543a-98e6-4d84-9df0-1869b9e573d7.pdf\"}",
+      "createdAt": "2026-09-22T13:46:30.633Z"
+    },
+    {
+      "id": "audit-1790084783854-vjko",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "LOGIN_SUCCESS",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": "::1",
+      "metadata": null,
+      "createdAt": "2026-09-22T13:46:23.854Z"
+    },
     {
       "id": "audit-1790082026944-lmwh",
       "actorType": "MEMBER",

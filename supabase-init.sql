@@ -186,23 +186,31 @@ INSERT INTO "Member" (
   "githubUsername", "closingQuote", "quoteAuthor", "isActive", "mustChangePassword", "failedLoginAttempts",
   "tokenVersion", "createdAt", "updatedAt"
 ) VALUES (
-  'member-1790019341672', 'yuvraj-singh3178', 'YUVRAJ.SINGH3178', '$2b$12$w8DoExR744FqmPR0K2OLO.Lp0i1AGIZu/mynrNRfzWnTiy6/jleT.',
-  'YUVRAJ SINGH', 'BHASKARACHRYA EXECUTIVE', 'B.Tech CS student at SRM University AP with experience in full-stack development, open-source contribution, and cybersecurity. 
-Hackathon finalist at national-level competitions. Ranked Top 15 Campus Ambassador nationwide at IIT Guwahati E-Cell. Active 
-member of IEEE Student Branch and Singularity Student Lab.', '{}',
+  'member-1790019341672', 'yuvraj-singh3178', 'YUVRAJ.SINGH3178', '$2b$12$L1RkH5m9ruwpmHJCZM3f5ePrCNkSKg61tL1NuRQUtlrLbl23KXRti',
+  'YUVRAJ SINGH', 'BHASKARACHRYA EXECUTIVE', 'B.Tech CSE student at SRM University AP focused on full-stack development, Web3, and cybersecurity. Builds production-oriented web applications with React, Next.js, TypeScript, Node.js, and PostgreSQL, while developing skills in Solidity and blockchain. Active in student technology communities through technical leadership, open-source work, and research-focused collaboration.', '{}',
   NULL, NULL, 'https://github.com/YUVRAJ-SINGH-3178', 'https://x.com/Yuvraj_Singh317',
-  'https://www.linkedin.com/in/yuvraj-singh-3178saturn/', NULL, '/uploads/resume-d9fafa21-05c0-4ba4-b44f-434b32bd270f.pdf', '/uploads/avatar-f1d8d8f4-0ed6-4a66-b95e-1aaa0c2e6848.png',
+  'https://www.linkedin.com/in/yuvraj-singh-3178saturn/', NULL, '/uploads/resume-b417543a-98e6-4d84-9df0-1869b9e573d7.pdf', '/uploads/avatar-f1d8d8f4-0ed6-4a66-b95e-1aaa0c2e6848.png',
   'YUVRAJ-SINGH-3178', NULL, 'YUVRAJ SINGH',
   TRUE, FALSE, 0,
-  2, '2026-09-21T19:35:41.672Z', '2026-09-21T19:51:43.807Z'
-) ON CONFLICT ("id") DO NOTHING;
+  4, '2026-09-21T19:35:41.672Z', '2026-09-22T13:49:32.731Z'
+) ON CONFLICT ("id") DO UPDATE SET
+  "passwordHash" = EXCLUDED."passwordHash",
+  "bio" = EXCLUDED."bio",
+  "resumeUrl" = EXCLUDED."resumeUrl",
+  "tokenVersion" = EXCLUDED."tokenVersion",
+  "updatedAt" = EXCLUDED."updatedAt";
 
 -- 8. Seed Experiences
 INSERT INTO "Experience" ("id", "memberId", "title", "org", "location", "startDate", "endDate", "description", "sortOrder")
-VALUES ('exp-1790019720917', 'member-1790019341672', 'Executive', 'Singularity Student Lab', 'SRM University AP', '2026', NULL, '', 0)
+VALUES ('exp-1790019720917', 'member-1790019341672', 'Executive', 'Singularity Student Lab', 'SRM University AP', '2026', NULL, '- Working with the lab''s interim leadership on technical direction, member coordination, and research-oriented initiatives.
+- Contributing to the growth and visibility of a new student research community focused on emerging technologies.', 0)
 ON CONFLICT ("id") DO NOTHING;
 INSERT INTO "Experience" ("id", "memberId", "title", "org", "location", "startDate", "endDate", "description", "sortOrder")
-VALUES ('exp-1790019769778', 'member-1790019341672', 'Technical Co-Lead', 'Microsoft Student Community', 'SRM University AP', '2026', NULL, '', 1)
+VALUES ('exp-1790019769778', 'member-1790019341672', 'Technical Co-Lead', 'Microsoft Student Community', 'SRM University AP', '2026', NULL, '- Contributing to the student community''s web and technical initiatives, including development and maintenance of its website.
+- Supporting technical execution and collaborating with members on web-development initiatives and community projects.', 1)
+ON CONFLICT ("id") DO NOTHING;
+INSERT INTO "Experience" ("id", "memberId", "title", "org", "location", "startDate", "endDate", "description", "sortOrder")
+VALUES ('exp-1790084823499', 'member-1790019341672', 'Technical Wing Member', 'IEEE', 'SRM University AP', 'March 2026', 'September 2026', 'Contributed to technical projects, website work, workshops, and knowledge-sharing initiatives', 2)
 ON CONFLICT ("id") DO NOTHING;
 
 -- 9. Seed Projects
