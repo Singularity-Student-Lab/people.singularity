@@ -21,11 +21,16 @@ async function saveUpload(
   buffer: Buffer,
   contentType: string
 ): Promise<{ url: string; filename: string }> {
-  // If BLOB_READ_WRITE_TOKEN is configured, use Vercel Blob for persistent cloud storage
-  if (process.env.BLOB_READ_WRITE_TOKEN) {
+  // Support both default BLOB_READ_WRITE_TOKEN and prefixed VERCEL_BLOB_READ_WRITE_TOKEN
+  const blobToken =
+    process.env.BLOB_READ_WRITE_TOKEN ||
+    process.env.VERCEL_BLOB_READ_WRITE_TOKEN;
+
+  if (blobToken) {
     const blob = await put(pathname, buffer, {
       access: 'public',
       contentType,
+      token: blobToken,
     });
     return {
       url: blob.url,
@@ -33,10 +38,10 @@ async function saveUpload(
     };
   }
 
-  // If in production without BLOB_READ_WRITE_TOKEN, fail closed
+  // If in production without blob token, fail closed
   if (process.env.NODE_ENV === 'production') {
     throw new Error(
-      'BLOB_READ_WRITE_TOKEN environment variable is missing. Ephemeral file uploads are forbidden in production.'
+      'Blob storage read-write token is missing. Ephemeral file uploads are forbidden in production.'
     );
   }
 
