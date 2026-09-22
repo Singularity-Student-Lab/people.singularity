@@ -7,7 +7,7 @@ This document provides a comprehensive technical overview of the security measur
 ## 1. Authentication & Session Revocation Model
 
 ### Deliberate Password Hashing Choice: bcrypt (12 rounds)
-- **Selection**: Passwords are cryptographically salted and hashed using `bcrypt` with **12 salt rounds** (~250–300ms computation time on Vercel serverless runtimes).
+- **Selection**: Passwords are cryptographically salted and hashed using `bcrypt` with **12 salt rounds** (~250–300ms computation time on serverless runtimes).
 - **Rationale vs. argon2id**: While `argon2id` is a sound memory-hard primitive, in serverless environments and cross-platform setups (such as Vercel AWS Lambda Linux containers vs. local Windows development), `argon2` requires platform-specific C++ binary compilation via `node-gyp`, which frequently causes deployment build failures or binary mismatch errors. `bcryptjs` with 12 rounds provides guaranteed cross-platform reproducibility, zero native compilation failures, and robust resistance to GPU-accelerated brute-force attacks exceeding standard industry minimums (10 rounds).
 
 ### Live Database Session Verification & Immediate Revocation (`tokenVersion`)
@@ -33,28 +33,36 @@ Unlike standard stateless JWT architectures where tokens remain valid until expi
   - `SameSite=Strict`: Immune to Cross-Site Request Forgery (CSRF).
   - Short TTL: 15 minutes.
 
----
-
-## 2. Cryptographic Human Verification (CAPTCHA) Engine
-
-To eliminate credential stuffing and automated brute-force attempts without relying on privacy-invasive third-party trackers:
-- **Server Challenge Generation (`/api/auth/captcha`)**:
-  - Generates 5-character non-ambiguous alphanumeric challenges (excluding `0/O`, `1/I/l`).
-  - Synthesizes an authentic SVG security image with noise lines, scatter dots, character rotations (-18° to +18°), and positional offsets.
-  - Generates a stateless, tamper-proof HMAC-SHA256 signature containing `timestamp:text:signature`.
-- **Server Verification Enforcement (`/api/auth/login`)**:
-  - In addition to rate-limiting (15 requests/15 min per IP, 5 failed attempts per user), `/api/auth/login` mandates valid `captchaToken` and `captchaAnswer`.
-  - The server verifies the HMAC signature and rejects tokens older than 5 minutes (TTL expiry).
-  - Any automated request or script attempting to log in without solving the challenge is rejected with `400 Bad Request`.
-
+### Fail-Closed Secret Policy
+- **Zero Fallback Secrets**: The application strictly prohibits default or fallback secret strings in production.
+- `JWT_SECRET` must be set in environment variables and contain at least 32 characters.
+- If `JWT_SECRET` is missing or shorter than 32 characters, the application immediately throws a fatal configuration error during startup/token generation, preventing forged tokens or weak signatures.
 
 ---
 
-## 2. Threat Boundaries: File Uploads vs. External `resumeUrl`
+## 2. Bot Protection & Human Verification Engine: Cloudflare Turnstile
+
+To eliminate credential stuffing and automated brute-force attacks without user-friction puzzles:
+- **Cloudflare Turnstile Primary Verification**:
+  - Embedded client-side via `@marsidev/react-turnstile` with lightweight, non-intrusive challenge mechanics.
+  - Server-side verification is executed via Cloudflare's official verification API (`https://challenges.cloudflare.com/turnstile/v0/siteverify`).
+  - Transmits secret key, response token, and client IP.
+- **Development & Testing Safety**:
+  - Cloudflare's official test sitekeys and secret keys (`1x00000000000000000000AA` / `1x0000000000000000000000000000000AA`) are supported out of the box in non-production environments to allow frictionless local development and automated testing.
+  - In production (`NODE_ENV === 'production'`), `TURNSTILE_SECRET_KEY` is strictly required; any absence fails closed.
+- **Cryptographic HMAC Fallback**:
+  - If a signed fallback CAPTCHA challenge is used, it utilizes HMAC-SHA256 with timestamp validation and a strict 5-minute expiry window, governed by `CAPTCHA_SECRET` (or `JWT_SECRET`).
+
+---
+
+## 3. Persistent File Storage & Upload Security: Vercel Blob
 
 An explicit architectural distinction is maintained between direct file uploads and external link references:
 
 ### Direct File Upload Pipeline (`/api/member/upload`)
+- **Persistent Cloud Storage (Vercel Blob)**:
+  - Uploads are streamed directly to **Vercel Blob** (`@vercel/blob`) rather than written to local disks or `/tmp` directories, which are ephemeral and read-only on serverless platforms.
+  - In production, `BLOB_READ_WRITE_TOKEN` is mandatory; attempts to fall back to ephemeral serverless filesystems are rejected.
 - **Avatar Uploads**:
   - MIME type allowlist: `image/jpeg`, `image/png`, `image/webp`.
   - Binary magic byte validation:
@@ -62,10 +70,10 @@ An explicit architectural distinction is maintained between direct file uploads 
     - PNG: `0x89 0x50 0x4E 0x47`
     - WEBP: `RIFF` ... `WEBP`
   - Size cap: **2 MB**.
-  - Storage: Stored outside web-executable scripts using cryptographic UUID filenames (`avatar-[uuid].ext`), preventing directory traversal (`../`) or arbitrary file execution.
+  - Filename Sanitization: Cryptographic UUID filenames (`avatar-[uuid].ext`), preventing directory traversal (`../`) or script execution attacks.
 - **PDF Resume Uploads**:
   - MIME type allowlist: `application/pdf`.
-  - **Binary magic byte inspection**: Header must strictly begin with `%PDF-` (`0x25 0x50 0x44 0x46 0x2D`). Disguised executables, HTML polyglots, or SVG scripts are rejected before disk writing.
+  - **Binary magic byte inspection**: Header must strictly begin with `%PDF-` (`0x25 0x50 0x44 0x46 0x2D`). Disguised executables, HTML polyglots, or SVG scripts are rejected prior to storage.
   - Size cap: **5 MB**.
   - Cryptographic UUID filename: `resume-[uuid].pdf`.
 
@@ -76,7 +84,23 @@ An explicit architectural distinction is maintained between direct file uploads 
 
 ---
 
-## 3. Server-Side Request Forgery (SSRF) Defense: GitHub Integration
+## 4. Distributed Rate Limiting: Upstash Redis
+
+In a serverless architecture (e.g., Vercel Lambdas), in-memory rate-limiting maps are ineffective because each incoming request can be dispatched to a different isolated container instance.
+
+- **Distributed Sliding Window**:
+  - Powered by **Upstash Redis** (`@upstash/ratelimit` and `@upstash/redis`).
+  - Evaluates sliding windows across all concurrent serverless instances globally.
+- **Dual-Tier Enforcement on Authentication (`/api/auth/login`)**:
+  - **IP-Level Limit**: Max 15 attempts per 15 minutes per IP address.
+  - **Account-Level Limit**: Max 5 failed attempts per 15 minutes per username.
+  - Consecutive failures trigger account-level database lockouts (`lockedUntil = Date.now() + 15 minutes`).
+- **Resilient Fallback**:
+  - In local development mode when Redis credentials are not yet configured, the system falls back gracefully to a memory-safe in-memory sliding window, ensuring local work is never blocked.
+
+---
+
+## 5. Server-Side Request Forgery (SSRF) Defense: GitHub Integration
 
 The conditional GitHub panel renders a contribution heatmap and recent merged PRs without requiring user OAuth tokens:
 - **Untrusted Username Sanitization**:
@@ -92,14 +116,18 @@ The conditional GitHub panel renders a contribution heatmap and recent merged PR
 
 ---
 
-## 4. Content Security Policy (CSP) & HTTP Security Headers
+## 6. Content Security Policy (CSP) & HTTP Security Headers
 
 Security headers are enforced at the network edge via Next.js middleware (`src/middleware.ts`):
 
-- **Nonce-Based Content Security Policy**:
-  - Middleware generates a per-request cryptographic UUID nonce (`crypto.randomUUID()`).
-  - Scripts and styles are governed by `'nonce-${nonce}'` and `'strict-dynamic'`.
-  - **Zero Inline Styles**: All layout, typography, status dots, and grid structures are implemented using static Tailwind CSS utility classes; no user-facing component requires inline `style=""` attributes.
+- **Dynamic Nonce-Based Content Security Policy**:
+  - Middleware generates a cryptographically unique base64 nonce per request (`crypto.randomUUID()`).
+  - Production `script-src` enforces `'nonce-${nonce}'` and `'strict-dynamic'`, eliminating `'unsafe-inline'`.
+  - Root layout reads the nonce via `headers()` and attaches it to script tags.
+- **Explicit Domain Allowlist**:
+  - Cloudflare Turnstile: `https://challenges.cloudflare.com` allowed in `script-src`, `connect-src`, and `frame-src`.
+  - Vercel Blob Storage: `https://*.public.blob.vercel-storage.com` allowed in `img-src` and `connect-src`.
+  - Media & External APIs: GitHub avatars, Supabase endpoints, and Gravatar allowed in `img-src` / `connect-src`.
 - **Enforced Security Headers**:
   - `Strict-Transport-Security`: `max-age=63072000; includeSubDomains; preload` (HSTS)
   - `X-Content-Type-Options`: `nosniff`
@@ -109,20 +137,9 @@ Security headers are enforced at the network edge via Next.js middleware (`src/m
 
 ---
 
-## 5. Brute Force Mitigation & Rate Limiting
-
-- **Sliding-Window Rate Limiter**:
-  - Tracked per client IP and per username.
-  - Limits login attempts to 5 failures per 15 minutes per account.
-  - Automatically locks the account (`lockedUntil = now + 15 minutes`) after 5 consecutive failures.
-- **Human Verification Check**:
-  - Form requires human interaction check prior to submission, mitigating automated credential stuffing scripts.
-
----
-
-## 6. Strict Data Templating & Relational Integrity
+## 7. Strict Data Templating & Relational Integrity
 
 - **No Free-Form HTML**: Neither members nor admins have access to rich-text/HTML editors. Every portfolio entry (Experiences, Projects, Highlights, Skills) is a structured database row.
 - **Curated Skills Architecture**: Skills are constrained to a curated relational catalog (`Skill` and `MemberSkill` join table), preventing typographical drift and maintaining visual consistency across every member's page.
 - **404 On Inactive Members**: If an admin deactivates a member (`isActive: false`), direct navigation to `/members/[slug]` invokes Next.js `notFound()`, ensuring deactivated profiles are never silently exposed.
-- **Audit Logging**: Sensitive actions (`LOGIN_SUCCESS`, `LOGIN_FAILURE`, `MEMBER_CREATED`, `MEMBER_DEACTIVATED`, `PASSWORD_CHANGED`, `SESSIONS_REVOKED`) are recorded in the `AuditLog` table with actor, timestamp, and IP address.
+- **Audit Logging**: Sensitive actions (`LOGIN_SUCCESS`, `LOGIN_FAILURE`, `MEMBER_CREATED`, `MEMBER_DEACTIVATED`, `PASSWORD_CHANGED`, `SESSIONS_REVOKED`, `AVATAR_UPLOADED`, `RESUME_UPLOADED`) are recorded in the `AuditLog` table with actor, timestamp, IP address, and metadata.
