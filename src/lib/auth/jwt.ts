@@ -48,26 +48,37 @@ export async function verifySessionToken(token: string): Promise<SessionPayload 
  * Sets the session cookie with HttpOnly, Secure, and SameSite=Strict.
  */
 export async function setSessionCookie(token: string) {
-  const cookieStore = await cookies();
-  cookieStore.set(COOKIE_NAME, token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
-    path: '/',
-    maxAge: 15 * 60, // 15 minutes
-  });
+  try {
+    const cookieStore = await cookies();
+    cookieStore.set(COOKIE_NAME, token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      path: '/',
+      maxAge: 15 * 60, // 15 minutes
+    });
+  } catch {
+    // In Next.js, cookies can only be mutated in Route Handlers or Server Actions
+  }
 }
 
 /**
  * Clears the session cookie on logout or revocation.
+ * Safe to call from both Route Handlers/Server Actions and Server Components.
  */
 export async function clearSessionCookie() {
-  const cookieStore = await cookies();
-  cookieStore.set(COOKIE_NAME, '', {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
-    path: '/',
-    maxAge: 0,
-  });
+  try {
+    const cookieStore = await cookies();
+    cookieStore.set(COOKIE_NAME, '', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      path: '/',
+      maxAge: 0,
+    });
+  } catch {
+    // In Next.js App Router, cookies cannot be modified during Server Component renders.
+    // Catching this prevents Next.js from throwing an unhandled runtime exception when
+    // an invalid session is rejected and redirected.
+  }
 }
