@@ -119,25 +119,25 @@ export function MemberPortfolioTemplate({ member, githubData }: TemplateProps) {
   );
 
   return (
-    <div className="w-full max-w-3xl mx-auto py-8 sm:py-12 px-4 sm:px-6 font-sans text-stone-900 selection:bg-stone-200 space-y-14">
+    <div className="w-full max-w-4xl xl:max-w-5xl 2xl:max-w-6xl mx-auto py-6 sm:py-10 px-2 sm:px-4 font-sans text-stone-900 selection:bg-stone-200 space-y-12 sm:space-y-16">
       {/* 1. HERO IDENTITY & BIOGRAPHY */}
       <section aria-label="Identity" className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-8">
           {/* Avatar */}
-          <div className="relative size-24 sm:size-32 rounded-2xl bg-white border border-stone-200/90 shadow-sm overflow-hidden shrink-0">
+          <div className="relative size-24 sm:size-32 xl:size-36 2xl:size-40 rounded-2xl sm:rounded-3xl bg-white border border-stone-200/90 shadow-sm overflow-hidden shrink-0">
             {cleanAvatarUrl && !imgError ? (
               <Image
                 src={cleanAvatarUrl}
                 alt={member.fullName}
                 fill
-                sizes="(max-width: 640px) 96px, 128px"
+                sizes="(max-width: 640px) 96px, (max-width: 1280px) 128px, 160px"
                 className="object-cover"
                 priority
                 unoptimized={Boolean(cleanAvatarUrl.startsWith('/uploads/'))}
                 onError={() => setImgError(true)}
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center bg-stone-100 text-stone-800 font-serif font-medium text-2xl tracking-wider select-none">
+              <div className="w-full h-full flex items-center justify-center bg-stone-100 text-stone-800 font-serif font-medium text-2xl sm:text-3xl tracking-wider select-none">
                 {initials || 'ME'}
               </div>
             )}
@@ -145,10 +145,10 @@ export function MemberPortfolioTemplate({ member, githubData }: TemplateProps) {
 
           {/* Name & Title */}
           <div className="space-y-1.5 flex-1">
-            <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-stone-950 font-normal tracking-tight leading-tight">
+            <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl 2xl:text-6xl text-stone-950 font-normal tracking-tight leading-tight">
               {member.fullName}
             </h1>
-            <p className="font-mono text-xs sm:text-sm text-stone-600 uppercase tracking-wide font-medium">
+            <p className="font-mono text-xs sm:text-sm 2xl:text-base text-stone-600 uppercase tracking-wide font-medium">
               {member.title}
             </p>
           </div>
@@ -156,14 +156,14 @@ export function MemberPortfolioTemplate({ member, githubData }: TemplateProps) {
 
         {/* Bio Narrative */}
         {member.bio && (
-          <p className="text-stone-700 text-base sm:text-lg font-light leading-relaxed max-w-2xl whitespace-pre-line">
+          <p className="text-stone-700 text-base sm:text-lg 2xl:text-xl font-light leading-relaxed max-w-3xl 2xl:max-w-4xl whitespace-pre-line">
             {member.bio}
           </p>
         )}
 
         {/* Bio Highlights */}
         {member.bioHighlights && member.bioHighlights.length > 0 && (
-          <div className="space-y-2 pt-1 border-t border-stone-200/70 max-w-2xl">
+          <div className="space-y-2 pt-1 border-t border-stone-200/70 max-w-3xl 2xl:max-w-4xl">
             {member.bioHighlights.map((highlight, idx) => (
               <div key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-stone-700 leading-relaxed font-normal">
                 <span className="inline-block size-1.5 rounded-full bg-stone-400 mt-2 shrink-0" />
@@ -265,12 +265,12 @@ export function MemberPortfolioTemplate({ member, githubData }: TemplateProps) {
       {member.projects && member.projects.length > 0 && (
         <section aria-label="Projects" className="space-y-6 pt-6 border-t border-stone-200/80">
           <div className="border-b border-stone-200 pb-2">
-            <h2 className="font-serif text-2xl sm:text-3xl text-stone-950 font-normal tracking-tight">
+            <h2 className="font-serif text-2xl sm:text-3xl 2xl:text-4xl text-stone-950 font-normal tracking-tight">
               Projects
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 xl:gap-6">
             {member.projects.map((project) => {
               const statusConfig = {
                 LIVE: { label: 'Live', dotClass: 'bg-emerald-500' },
@@ -350,18 +350,18 @@ export function MemberPortfolioTemplate({ member, githubData }: TemplateProps) {
       {member.experiences && member.experiences.length > 0 && (
         <section aria-label="Experience" className="space-y-6 pt-6 border-t border-stone-200/80">
           <div className="border-b border-stone-200 pb-2">
-            <h2 className="font-serif text-2xl sm:text-3xl text-stone-950 font-normal tracking-tight">
+            <h2 className="font-serif text-2xl sm:text-3xl 2xl:text-4xl text-stone-950 font-normal tracking-tight">
               Experience
             </h2>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-4 sm:space-y-5">
             {visibleExperiences.map((exp) => {
               const isExpanded = expandedExperienceIds[exp.id] ?? true;
               return (
                 <div
                   key={exp.id}
-                  className="p-5 bg-white border border-stone-200/80 rounded-xl space-y-2 shadow-2xs hover:border-stone-300 transition-colors"
+                  className="p-5 sm:p-6 2xl:p-7 bg-white border border-stone-200/80 rounded-xl sm:rounded-2xl space-y-2 shadow-2xs hover:border-stone-300 transition-colors"
                 >
                   <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
                     <h3 className="text-base font-medium text-stone-950">
@@ -416,7 +416,7 @@ export function MemberPortfolioTemplate({ member, githubData }: TemplateProps) {
       {member.githubUsername && githubData && (
         <section aria-label="Open Source Contributions" className="space-y-4 pt-6 border-t border-stone-200/80">
           <div className="border-b border-stone-200 pb-2 flex items-center justify-between">
-            <h2 className="font-serif text-2xl sm:text-3xl text-stone-950 font-normal tracking-tight">
+            <h2 className="font-serif text-2xl sm:text-3xl 2xl:text-4xl text-stone-950 font-normal tracking-tight">
               Open Source & Contributions
             </h2>
             <a
@@ -430,7 +430,7 @@ export function MemberPortfolioTemplate({ member, githubData }: TemplateProps) {
             </a>
           </div>
 
-          <div className="p-5 bg-white border border-stone-200/80 rounded-xl shadow-2xs space-y-4">
+          <div className="p-5 sm:p-6 2xl:p-7 bg-white border border-stone-200/80 rounded-xl sm:rounded-2xl shadow-2xs space-y-4">
             <div>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs font-mono text-stone-600 mb-3 pb-2 border-b border-stone-100 gap-1">
                 <span className="font-medium text-stone-800 text-[11px]">
@@ -544,12 +544,12 @@ export function MemberPortfolioTemplate({ member, githubData }: TemplateProps) {
       {Object.keys(skillsByCategory).length > 0 && (
         <section aria-label="Skills" className="space-y-6 pt-6 border-t border-stone-200/80">
           <div className="border-b border-stone-200 pb-2">
-            <h2 className="font-serif text-2xl sm:text-3xl text-stone-950 font-normal tracking-tight">
+            <h2 className="font-serif text-2xl sm:text-3xl 2xl:text-4xl text-stone-950 font-normal tracking-tight">
               Skills
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 xl:gap-5">
             {Object.entries(skillsByCategory).map(([catKey, skillNames]) => (
               <div
                 key={catKey}

@@ -36,12 +36,12 @@ export default async function HomePage() {
     <div className="min-h-screen flex flex-col bg-[#FAF8F5] text-stone-900 font-sans">
       <PublicNavbar />
 
-      <main className="flex-1 max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-10 w-full space-y-8">
-        <div className="border-b border-stone-200 pb-5">
-          <h1 className="font-serif text-3xl sm:text-4xl text-stone-950 font-normal tracking-tight">
+      <main className="flex-1 max-w-5xl xl:max-w-6xl 2xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12 py-8 sm:py-12 2xl:py-16 w-full space-y-8 sm:space-y-10">
+        <div className="border-b border-stone-200 pb-5 sm:pb-6">
+          <h1 className="font-serif text-3xl sm:text-4xl 2xl:text-5xl text-stone-950 font-normal tracking-tight">
             Member Directory
           </h1>
-          <p className="text-stone-600 text-sm mt-1.5 font-normal">
+          <p className="text-stone-600 text-sm sm:text-base 2xl:text-lg mt-1.5 font-normal">
             Student members and builders at the Singularity Student Lab, SRM University AP.
           </p>
         </div>
@@ -50,7 +50,7 @@ export default async function HomePage() {
       </main>
 
       <footer id="lab-footer" className="border-t border-stone-200 mt-20 py-8 text-xs font-mono text-stone-500 bg-stone-100/40 scroll-mt-10">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="max-w-5xl xl:max-w-6xl 2xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
             <span className="font-serif text-stone-700 text-sm">Singularity Student Lab</span>
             <span className="text-stone-400 mx-2">•</span>

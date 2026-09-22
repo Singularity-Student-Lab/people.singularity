@@ -12,30 +12,30 @@ export default function AboutPage() {
     <div className="min-h-screen flex flex-col bg-[#FAF8F5] text-stone-900 font-sans">
       <PublicNavbar />
 
-      <main className="flex-1 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 w-full flex items-center">
+      <main className="flex-1 max-w-5xl xl:max-w-6xl 2xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12 py-16 sm:py-24 2xl:py-32 w-full flex items-center">
         <section aria-labelledby="vision-mission-heading" className="w-full">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-16 items-start">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-16 2xl:gap-24 items-start">
             {/* Left Column: Heading */}
             <div className="md:col-span-5 space-y-3">
-              <span className="block font-mono text-xs text-stone-500 tracking-widest uppercase">
+              <span className="block font-mono text-xs 2xl:text-sm text-stone-500 tracking-widest uppercase">
                 01 // NORTH STAR
               </span>
               <h1
                 id="vision-mission-heading"
-                className="font-sans font-extrabold text-3xl sm:text-4xl lg:text-5xl text-stone-950 tracking-tight uppercase leading-none"
+                className="font-sans font-extrabold text-3xl sm:text-4xl lg:text-5xl 2xl:text-6xl text-stone-950 tracking-tight uppercase leading-none"
               >
                 VISION &<br />MISSION
               </h1>
             </div>
 
             {/* Right Column: Quotes & Statements */}
-            <div className="md:col-span-7 space-y-8">
+            <div className="md:col-span-7 space-y-8 2xl:space-y-12">
               {/* 01 Vision */}
               <div className="space-y-3">
-                <span className="block font-mono text-xs sm:text-sm font-semibold tracking-wider text-stone-900 uppercase">
+                <span className="block font-mono text-xs sm:text-sm 2xl:text-base font-semibold tracking-wider text-stone-900 uppercase">
                   01 VISION
                 </span>
-                <p className="text-base sm:text-lg text-stone-800 leading-relaxed font-normal">
+                <p className="text-base sm:text-lg 2xl:text-xl text-stone-800 leading-relaxed font-normal">
                   &ldquo;We aim to revolutionize the future of technology by driving groundbreaking research and fostering an environment where innovation knows no bounds. Through inclusive collaboration, we strive to create transformative solutions that bridge the gap between ideas and real-world impact.&rdquo;
                 </p>
               </div>
@@ -45,10 +45,10 @@ export default function AboutPage() {
 
               {/* 02 Mission */}
               <div className="space-y-3">
-                <span className="block font-mono text-xs sm:text-sm font-semibold tracking-wider text-stone-900 uppercase">
+                <span className="block font-mono text-xs sm:text-sm 2xl:text-base font-semibold tracking-wider text-stone-900 uppercase">
                   02 MISSION
                 </span>
-                <p className="text-base sm:text-lg text-stone-800 leading-relaxed font-normal">
+                <p className="text-base sm:text-lg 2xl:text-xl text-stone-800 leading-relaxed font-normal">
                   &ldquo;To push the limits of technological advancement with cutting-edge tools and research-driven innovation. We are dedicated to knowledge sharing and empowering the next generation of tech leaders, ensuring a future where technology serves all.&rdquo;
                 </p>
               </div>
@@ -58,7 +58,7 @@ export default function AboutPage() {
       </main>
 
       <footer className="border-t border-stone-200 py-8 text-xs font-mono text-stone-500 bg-stone-100/40 mt-auto">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="max-w-5xl xl:max-w-6xl 2xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
             <span className="font-serif text-stone-700 text-sm">Singularity Student Lab</span>
             <span className="text-stone-400 mx-2">•</span>

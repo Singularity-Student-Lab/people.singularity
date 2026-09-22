@@ -10,6 +10,34 @@
   },
   "members": [
     {
+      "id": "member-1790092522073",
+      "slug": "praneethzz",
+      "username": "praneethzz",
+      "passwordHash": "$2b$12$oEi/OcYLxGikWi4OIiJ2mOyux2I.OhjcSWSqcN5MTYBsSbVBKyiQO",
+      "fullName": "Praneeth",
+      "title": "BHASKARACHRYA EXECUTIVE",
+      "bio": "",
+      "bioHighlights": [],
+      "bookCallUrl": null,
+      "email": null,
+      "github": null,
+      "twitter": null,
+      "linkedin": null,
+      "discord": null,
+      "resumeUrl": null,
+      "profileImageUrl": null,
+      "githubUsername": null,
+      "closingQuote": null,
+      "quoteAuthor": null,
+      "isActive": true,
+      "mustChangePassword": false,
+      "failedLoginAttempts": 0,
+      "lockedUntil": null,
+      "tokenVersion": 2,
+      "createdAt": "2026-09-22T15:55:22.073Z",
+      "updatedAt": "2026-09-22T15:55:22.073Z"
+    },
+    {
       "id": "member-1790019341672",
       "slug": "yuvraj-singh3178",
       "username": "YUVRAJ.SINGH3178",
@@ -387,6 +415,50 @@
     }
   ],
   "auditLogs": [
+    {
+      "id": "audit-1790092867654-g4l7",
+      "actorType": "MEMBER",
+      "actorId": "member-1790092522073",
+      "action": "PASSWORD_CHANGED",
+      "targetType": "Member",
+      "targetId": "member-1790092522073",
+      "ipAddress": null,
+      "metadata": null,
+      "createdAt": "2026-09-22T16:01:07.654Z"
+    },
+    {
+      "id": "audit-1790092587573-6h5k",
+      "actorType": "MEMBER",
+      "actorId": "member-1790092522073",
+      "action": "LOGIN_SUCCESS",
+      "targetType": "Member",
+      "targetId": "member-1790092522073",
+      "ipAddress": "::1",
+      "metadata": null,
+      "createdAt": "2026-09-22T15:56:27.573Z"
+    },
+    {
+      "id": "audit-1790092522079-0j7x",
+      "actorType": "ADMIN",
+      "actorId": "admin-singularity-root",
+      "action": "MEMBER_CREATED",
+      "targetType": "Member",
+      "targetId": "member-1790092522073",
+      "ipAddress": null,
+      "metadata": "{\"username\":\"praneethzz\",\"slug\":\"praneethzz\"}",
+      "createdAt": "2026-09-22T15:55:22.079Z"
+    },
+    {
+      "id": "audit-1790092392469-6ltu",
+      "actorType": "ADMIN",
+      "actorId": "admin-singularity-root",
+      "action": "ADMIN_LOGIN_SUCCESS",
+      "targetType": "Admin",
+      "targetId": "admin-singularity-root",
+      "ipAddress": "::1",
+      "metadata": null,
+      "createdAt": "2026-09-22T15:53:12.469Z"
+    },
     {
       "id": "audit-1790085064134-desr",
       "actorType": "MEMBER",

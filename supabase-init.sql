@@ -200,6 +200,24 @@ INSERT INTO "Member" (
   "tokenVersion" = EXCLUDED."tokenVersion",
   "updatedAt" = EXCLUDED."updatedAt";
 
+INSERT INTO "Member" (
+  "id", "slug", "username", "passwordHash", "fullName", "title", "bio", "bioHighlights",
+  "bookCallUrl", "email", "github", "twitter", "linkedin", "discord", "resumeUrl", "profileImageUrl",
+  "githubUsername", "closingQuote", "quoteAuthor", "isActive", "mustChangePassword", "failedLoginAttempts",
+  "tokenVersion", "createdAt", "updatedAt"
+) VALUES (
+  'member-1790092522073', 'praneethzz', 'praneethzz', '$2b$12$oEi/OcYLxGikWi4OIiJ2mOyux2I.OhjcSWSqcN5MTYBsSbVBKyiQO',
+  'Praneeth', 'BHASKARACHRYA EXECUTIVE', '', '{}',
+  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
+  NULL, NULL, NULL,
+  TRUE, FALSE, 0,
+  2, '2026-09-22T15:55:22.073Z', '2026-09-22T15:55:22.073Z'
+) ON CONFLICT ("id") DO UPDATE SET
+  "passwordHash" = EXCLUDED."passwordHash",
+  "bio" = EXCLUDED."bio",
+  "tokenVersion" = EXCLUDED."tokenVersion",
+  "updatedAt" = EXCLUDED."updatedAt";
+
 -- 8. Seed Experiences
 INSERT INTO "Experience" ("id", "memberId", "title", "org", "location", "startDate", "endDate", "description", "sortOrder")
 VALUES ('exp-1790019720917', 'member-1790019341672', 'Executive', 'Singularity Student Lab', 'SRM University AP', '2026', NULL, '- Working with the lab''s interim leadership on technical direction, member coordination, and research-oriented initiatives.

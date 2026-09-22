@@ -20,7 +20,7 @@ export default async function MemberDashboardLayout({ children }: { children: Re
       <MemberNavbar memberSlug={auth.member.slug} />
 
       {/* Main Workspace Area */}
-      <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-10">
+      <main className="flex-1 max-w-5xl xl:max-w-6xl 2xl:max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12 py-8 sm:py-12">
         {children}
       </main>
     </div>
