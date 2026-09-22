@@ -4,14 +4,14 @@ import { db } from '@/lib/db/repository';
 import { LoginSchema } from '@/lib/security/validation';
 import { checkRateLimit, resetRateLimit } from '@/lib/security/rate-limit';
 import { signSessionToken, setSessionCookie } from '@/lib/auth/jwt';
-import { verifyCaptcha } from '@/lib/security/captcha';
+import { verifyTurnstileToken, verifyCaptcha } from '@/lib/security/captcha';
 
 export async function POST(request: NextRequest) {
   try {
     const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || '127.0.0.1';
 
-    // 1. IP-level rate limit (max 15 attempts per 15 minutes)
-    const ipLimit = checkRateLimit(`login:ip:${ip}`, 15, 15 * 60 * 1000);
+    // 1. IP-level distributed rate limit (max 15 attempts per 15 minutes)
+    const ipLimit = await checkRateLimit(`login:ip:${ip}`, 15, 15 * 60 * 1000);
     if (!ipLimit.allowed) {
       return NextResponse.json(
         { error: `Too many login attempts from this network. Try again in ${ipLimit.resetSeconds} seconds.` },
@@ -28,31 +28,39 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { username, password, captchaToken, captchaAnswer } = parseResult.data;
+    const { username, password, captchaToken, captchaAnswer, turnstileToken } = parseResult.data;
 
-    // Real Captcha Security Enforcement
+    // Bot & Human Verification Enforcement (Turnstile primary, fallback to signed Captcha)
     const isTestEnv = process.env.NODE_ENV === 'test';
     const isTestBypass = isTestEnv && request.headers.get('x-test-bypass') === 'true';
 
     if (!isTestBypass) {
-      if (!captchaToken || !captchaAnswer) {
+      if (turnstileToken) {
+        const turnstileResult = await verifyTurnstileToken(turnstileToken, ip);
+        if (!turnstileResult.success) {
+          return NextResponse.json(
+            { error: turnstileResult.error || 'Human verification failed. Please try again.' },
+            { status: 400 }
+          );
+        }
+      } else if (captchaToken && captchaAnswer) {
+        const isCaptchaValid = verifyCaptcha(captchaToken, captchaAnswer);
+        if (!isCaptchaValid) {
+          return NextResponse.json(
+            { error: 'Security verification failed: incorrect or expired verification code.' },
+            { status: 400 }
+          );
+        }
+      } else {
         return NextResponse.json(
           { error: 'Human verification required. Please complete the security check.' },
-          { status: 400 }
-        );
-      }
-
-      const isCaptchaValid = verifyCaptcha(captchaToken, captchaAnswer);
-      if (!isCaptchaValid) {
-        return NextResponse.json(
-          { error: 'Security verification failed: incorrect or expired verification code.' },
           { status: 400 }
         );
       }
     }
 
     // 2. Username-level rate limit (max 5 failed attempts per 15 minutes)
-    const userLimit = checkRateLimit(`login:user:${username.toLowerCase()}`, 5, 15 * 60 * 1000);
+    const userLimit = await checkRateLimit(`login:user:${username.toLowerCase()}`, 5, 15 * 60 * 1000);
     if (!userLimit.allowed) {
       return NextResponse.json(
         { error: `Account locked due to consecutive failures. Try again in ${userLimit.resetSeconds} seconds.` },
@@ -108,7 +116,7 @@ export async function POST(request: NextRequest) {
 
       // Success: reset failures and issue JWT session token
       await db.resetFailedLogins(member.id);
-      resetRateLimit(`login:user:${username.toLowerCase()}`);
+      await resetRateLimit(`login:user:${username.toLowerCase()}`);
 
       const token = await signSessionToken({
         userId: member.id,
@@ -154,7 +162,7 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      resetRateLimit(`login:user:${username.toLowerCase()}`);
+      await resetRateLimit(`login:user:${username.toLowerCase()}`);
 
       const token = await signSessionToken({
         userId: admin.id,

@@ -1,8 +1,4 @@
 import { SignJWT, jwtVerify } from 'jose';
-import { cookies } from 'next/headers';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'singularity-lab-ultra-secure-jwt-secret-key-at-least-64-characters-long!';
-const encodedKey = new TextEncoder().encode(JWT_SECRET);
 
 export interface SessionPayload {
   userId: string;
@@ -14,6 +10,26 @@ export interface SessionPayload {
 export const COOKIE_NAME = 'singularity_session';
 
 /**
+ * Returns the cryptographically secure JWT secret or fails closed immediately.
+ */
+export function getJwtSecret(): string {
+  const secret = process.env.JWT_SECRET;
+  if (!secret || secret.trim().length < 32) {
+    throw new Error(
+      '[Security Exception] JWT_SECRET environment variable is missing or shorter than 32 characters. Halting to prevent forged tokens.'
+    );
+  }
+  return secret;
+}
+
+/**
+ * Encodes the secret key for HS256 JWT operations.
+ */
+export function getJwtEncodedKey(): Uint8Array {
+  return new TextEncoder().encode(getJwtSecret());
+}
+
+/**
  * Signs a new JWT session token with HS256 and a 15-minute TTL.
  */
 export async function signSessionToken(payload: SessionPayload): Promise<string> {
@@ -21,7 +37,7 @@ export async function signSessionToken(payload: SessionPayload): Promise<string>
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime('15m')
-    .sign(encodedKey);
+    .sign(getJwtEncodedKey());
 }
 
 /**
@@ -30,7 +46,7 @@ export async function signSessionToken(payload: SessionPayload): Promise<string>
  */
 export async function verifySessionToken(token: string): Promise<SessionPayload | null> {
   try {
-    const { payload } = await jwtVerify(token, encodedKey, {
+    const { payload } = await jwtVerify(token, getJwtEncodedKey(), {
       algorithms: ['HS256'],
     });
     return {
@@ -49,6 +65,7 @@ export async function verifySessionToken(token: string): Promise<SessionPayload 
  */
 export async function setSessionCookie(token: string) {
   try {
+    const { cookies } = await import('next/headers');
     const cookieStore = await cookies();
     cookieStore.set(COOKIE_NAME, token, {
       httpOnly: true,
@@ -68,6 +85,7 @@ export async function setSessionCookie(token: string) {
  */
 export async function clearSessionCookie() {
   try {
+    const { cookies } = await import('next/headers');
     const cookieStore = await cookies();
     cookieStore.set(COOKIE_NAME, '', {
       httpOnly: true,
@@ -78,7 +96,5 @@ export async function clearSessionCookie() {
     });
   } catch {
     // In Next.js App Router, cookies cannot be modified during Server Component renders.
-    // Catching this prevents Next.js from throwing an unhandled runtime exception when
-    // an invalid session is rejected and redirected.
   }
 }

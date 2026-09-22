@@ -7,6 +7,7 @@ export const LoginSchema = z.object({
   password: z.string().min(1, 'Password is required'),
   captchaToken: z.string().optional(),
   captchaAnswer: z.string().optional(),
+  turnstileToken: z.string().optional(),
 });
 
 export const ChangePasswordSchema = z.object({

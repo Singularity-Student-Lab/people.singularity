@@ -1,33 +1,14 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { jwtVerify } from 'jose';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'singularity-lab-ultra-secure-jwt-secret-key-at-least-64-characters-long!';
-const encodedKey = new TextEncoder().encode(JWT_SECRET);
-const COOKIE_NAME = 'singularity_session';
+import { verifySessionToken, COOKIE_NAME } from '@/lib/auth/jwt';
 
 export async function middleware(request: NextRequest) {
   const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
   const pathname = request.nextUrl.pathname;
 
-  // 1. Session decoding for edge route guards
+  // 1. Session decoding for edge route guards via canonical JWT verifier
   const token = request.cookies.get(COOKIE_NAME)?.value;
-  let sessionPayload: { userId: string; username: string; role: string; tokenVersion: number } | null = null;
-
-  if (token) {
-    try {
-      const { payload } = await jwtVerify(token, encodedKey, { algorithms: ['HS256'] });
-      sessionPayload = {
-        userId: payload.userId as string,
-        username: payload.username as string,
-        role: payload.role as string,
-        tokenVersion: (payload.tokenVersion as number) || 1,
-      };
-    } catch {
-      // Invalid/expired token
-      sessionPayload = null;
-    }
-  }
+  const sessionPayload = token ? await verifySessionToken(token) : null;
 
   // 2. Guard /admin routes
   if (pathname.startsWith('/admin')) {
@@ -56,19 +37,20 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // 5. Construct Content Security Policy (CSP)
+  // 5. Construct Content Security Policy (CSP) with Nonce Enforcement
   const isDev = process.env.NODE_ENV !== 'production';
   const scriptSrc = isDev
-    ? `'self' 'unsafe-eval' 'unsafe-inline'`
-    : `'self' 'unsafe-inline'`;
+    ? `'self' 'unsafe-eval' 'unsafe-inline' https://challenges.cloudflare.com`
+    : `'self' 'nonce-${nonce}' 'strict-dynamic' https://challenges.cloudflare.com`;
 
   const cspHeader = `
     default-src 'self';
     script-src ${scriptSrc};
     style-src 'self' 'unsafe-inline';
-    img-src 'self' data: https: blob:;
+    img-src 'self' data: https: blob: https://*.public.blob.vercel-storage.com;
     font-src 'self' data: https:;
-    connect-src 'self' https://api.github.com https://*.supabase.co;
+    connect-src 'self' https://api.github.com https://*.supabase.co https://*.public.blob.vercel-storage.com https://challenges.cloudflare.com;
+    frame-src 'self' https://challenges.cloudflare.com;
     frame-ancestors 'none';
     form-action 'self';
     base-uri 'self';

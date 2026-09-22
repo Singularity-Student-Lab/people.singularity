@@ -1,16 +1,18 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ShieldCheck, KeyRound, User, AlertCircle, RotateCw, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile';
+import { ShieldCheck, KeyRound, User, AlertCircle, ArrowRight, ArrowLeft } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
 function LoginFormContent() {
   const router = useRouter();
   const [redirectPath, setRedirectPath] = useState('');
+  const turnstileRef = useRef<TurnstileInstance>(null);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -21,37 +23,9 @@ function LoginFormContent() {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [turnstileToken, setTurnstileToken] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  // Real Captcha State
-  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
-  const [captchaSvg, setCaptchaSvg] = useState<string | null>(null);
-  const [captchaInput, setCaptchaInput] = useState('');
-  const [captchaLoading, setCaptchaLoading] = useState(false);
-  const [captchaError, setCaptchaError] = useState<string | null>(null);
-
-  const loadCaptcha = async () => {
-    setCaptchaLoading(true);
-    setCaptchaError(null);
-    setCaptchaInput('');
-    try {
-      const res = await fetch('/api/auth/captcha');
-      if (!res.ok) throw new Error('Failed to load challenge');
-      const data = await res.json();
-      setCaptchaToken(data.token);
-      setCaptchaSvg(data.svg);
-    } catch {
-      setCaptchaError('Failed to load security challenge. Please click reload.');
-    } finally {
-      setCaptchaLoading(false);
-    }
-  };
-
-  // Automatically load real captcha on page mount
-  useEffect(() => {
-    loadCaptcha();
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,8 +37,8 @@ function LoginFormContent() {
       setError('Please enter your password.');
       return;
     }
-    if (!captchaInput.trim()) {
-      setError('Please enter the 5-character security code shown in the image.');
+    if (!turnstileToken) {
+      setError('Please complete the security verification challenge.');
       return;
     }
 
@@ -78,8 +52,7 @@ function LoginFormContent() {
         body: JSON.stringify({
           username: username.trim(),
           password,
-          captchaToken,
-          captchaAnswer: captchaInput.trim().toUpperCase(),
+          turnstileToken,
         }),
       });
 
@@ -88,8 +61,9 @@ function LoginFormContent() {
       if (!res.ok) {
         setError(data.error || 'Authentication failed. Please verify credentials.');
         setLoading(false);
-        // Refresh challenge automatically on failed login
-        loadCaptcha();
+        // Reset turnstile on failed attempt
+        turnstileRef.current?.reset();
+        setTurnstileToken('');
         return;
       }
 
@@ -105,7 +79,8 @@ function LoginFormContent() {
     } catch {
       setError('An unexpected network error occurred. Please try again.');
       setLoading(false);
-      loadCaptcha();
+      turnstileRef.current?.reset();
+      setTurnstileToken('');
     }
   };
 
@@ -164,67 +139,30 @@ function LoginFormContent() {
           </div>
         </div>
 
-        {/* Security Verification */}
+        {/* Cloudflare Turnstile Human Verification */}
         <div className="p-4 bg-stone-50/70 border border-stone-200/80 rounded-xl space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5 text-stone-800">
               <ShieldCheck className="size-4 text-stone-600" />
               <span className="font-mono text-[11px] uppercase tracking-wider font-semibold text-stone-700">
-                Security Check
+                Security Verification
               </span>
             </div>
-
-            <button
-              type="button"
-              onClick={loadCaptcha}
-              disabled={captchaLoading}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-mono text-stone-600 hover:text-stone-950 bg-white border border-stone-200 hover:border-stone-300 rounded-lg shadow-2xs transition-colors cursor-pointer disabled:opacity-50"
-              title="Generate new verification code"
-            >
-              <RotateCw className={`size-3 ${captchaLoading ? 'animate-spin' : ''}`} />
-              <span>{captchaLoading ? 'Loading...' : 'New code'}</span>
-            </button>
+            <span className="text-[10px] font-mono text-stone-400">Cloudflare Turnstile</span>
           </div>
 
-          <div className="space-y-2">
-            <div className="flex items-end gap-3">
-              {/* SVG Captcha Image */}
-              <div className="w-[185px] sm:w-[200px] h-[54px] rounded-xl overflow-hidden flex items-center justify-center shrink-0 shadow-2xs">
-                {captchaSvg ? (
-                  <div
-                    className="w-full h-full flex items-center justify-center select-none"
-                    dangerouslySetInnerHTML={{ __html: captchaSvg }}
-                  />
-                ) : (
-                  <div className="flex items-center gap-1.5 text-[11px] font-mono text-stone-400">
-                    <RotateCw className="size-3.5 animate-spin" />
-                    <span>Loading...</span>
-                  </div>
-                )}
-              </div>
-
-              {/* Code Input */}
-              <div className="flex-1">
-                <label className="block text-[10px] font-mono uppercase tracking-wider text-stone-500 mb-1">
-                  Enter Code
-                </label>
-                <input
-                  type="text"
-                  maxLength={5}
-                  required
-                  value={captchaInput}
-                  onChange={(e) => setCaptchaInput(e.target.value.toUpperCase())}
-                  placeholder="CODE"
-                  className="w-full h-[54px] px-3 text-base font-mono uppercase tracking-[0.25em] text-center font-bold bg-white border border-stone-200 rounded-xl focus:outline-hidden focus:border-stone-900 focus:ring-2 focus:ring-stone-900/5 shadow-2xs transition-all placeholder:text-stone-300 placeholder:tracking-normal placeholder:font-normal placeholder:text-xs"
-                />
-              </div>
-            </div>
-
-            {captchaError && (
-              <p className="text-[11px] font-mono text-rose-700 font-medium">
-                {captchaError}
-              </p>
-            )}
+          <div className="flex justify-center py-1 overflow-hidden min-h-[65px] items-center">
+            <Turnstile
+              ref={turnstileRef}
+              siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000AA'}
+              onSuccess={(token) => setTurnstileToken(token)}
+              onExpire={() => setTurnstileToken('')}
+              onError={() => setError('Verification challenge failed to load. Please refresh.')}
+              options={{
+                theme: 'light',
+                size: 'normal',
+              }}
+            />
           </div>
         </div>
 

@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
-import os from 'os';
+import { put } from '@vercel/blob';
 
 const UPLOADS_DIR = path.join(process.cwd(), 'public', 'uploads');
 
@@ -12,22 +12,45 @@ export interface UploadValidationResult {
   filename?: string;
 }
 
-async function saveUploadFile(safeFilename: string, buffer: Buffer): Promise<void> {
-  try {
-    if (!fs.existsSync(UPLOADS_DIR)) {
-      fs.mkdirSync(UPLOADS_DIR, { recursive: true });
-    }
-    const filePath = path.join(UPLOADS_DIR, safeFilename);
-    await fs.promises.writeFile(filePath, buffer);
-  } catch {
-    // If running in a read-only serverless filesystem (e.g., Vercel Lambda), fallback to writable OS temp directory
-    const tmpUploadsDir = path.join(os.tmpdir(), 'uploads');
-    if (!fs.existsSync(tmpUploadsDir)) {
-      fs.mkdirSync(tmpUploadsDir, { recursive: true });
-    }
-    const tmpFilePath = path.join(tmpUploadsDir, safeFilename);
-    await fs.promises.writeFile(tmpFilePath, buffer);
+/**
+ * Saves file to Vercel Blob storage (or local disk in development mode only).
+ * Ephemeral /tmp storage is strictly prohibited to prevent data loss on serverless.
+ */
+async function saveUpload(
+  pathname: string,
+  buffer: Buffer,
+  contentType: string
+): Promise<{ url: string; filename: string }> {
+  // If BLOB_READ_WRITE_TOKEN is configured, use Vercel Blob for persistent cloud storage
+  if (process.env.BLOB_READ_WRITE_TOKEN) {
+    const blob = await put(pathname, buffer, {
+      access: 'public',
+      contentType,
+    });
+    return {
+      url: blob.url,
+      filename: pathname,
+    };
   }
+
+  // If in production without BLOB_READ_WRITE_TOKEN, fail closed
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error(
+      'BLOB_READ_WRITE_TOKEN environment variable is missing. Ephemeral file uploads are forbidden in production.'
+    );
+  }
+
+  // Local development fallback: write to public/uploads
+  if (!fs.existsSync(UPLOADS_DIR)) {
+    fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+  }
+  const filePath = path.join(UPLOADS_DIR, pathname);
+  await fs.promises.writeFile(filePath, buffer);
+
+  return {
+    url: `/uploads/${pathname}`,
+    filename: pathname,
+  };
 }
 
 /**
@@ -73,13 +96,20 @@ export async function processImageUpload(
 
   // Generate cryptographic UUID filename (path traversal immune)
   const safeFilename = `avatar-${crypto.randomUUID()}${extension}`;
-  await saveUploadFile(safeFilename, buffer);
-
-  return {
-    valid: true,
-    url: `/uploads/${safeFilename}`,
-    filename: safeFilename,
-  };
+  try {
+    const saved = await saveUpload(safeFilename, buffer, declaredMimeType);
+    return {
+      valid: true,
+      url: saved.url,
+      filename: saved.filename,
+    };
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Failed to save upload file';
+    return {
+      valid: false,
+      error: message,
+    };
+  }
 }
 
 /**
@@ -118,11 +148,18 @@ export async function processPdfResumeUpload(
   }
 
   const safeFilename = `resume-${crypto.randomUUID()}.pdf`;
-  await saveUploadFile(safeFilename, buffer);
-
-  return {
-    valid: true,
-    url: `/uploads/${safeFilename}`,
-    filename: safeFilename,
-  };
+  try {
+    const saved = await saveUpload(safeFilename, buffer, 'application/pdf');
+    return {
+      valid: true,
+      url: saved.url,
+      filename: saved.filename,
+    };
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Failed to save upload file';
+    return {
+      valid: false,
+      error: message,
+    };
+  }
 }

@@ -16,8 +16,12 @@
     "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
+    "@marsidev/react-turnstile": "^1.6.1",
     "@prisma/client": "^6.4.1",
     "@types/pg": "^8.23.1",
+    "@upstash/ratelimit": "^2.1.0",
+    "@upstash/redis": "^1.39.0",
+    "@vercel/blob": "^2.8.0",
     "bcryptjs": "^3.0.3",
     "clsx": "^2.1.1",
     "framer-motion": "^13.4.0",

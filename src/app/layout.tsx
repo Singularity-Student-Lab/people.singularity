@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import { Newsreader, Inter } from 'next/font/google';
 import localFont from 'next/font/local';
 import './globals.css';
@@ -83,17 +84,21 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const headersList = await headers();
+  const nonce = headersList.get('x-nonce') || undefined;
+
   return (
     <html
       lang="en"
       className={`${newsreader.variable} ${inter.variable} ${absans.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col bg-stone-50 text-stone-900 font-sans">
+      <body className="min-h-full flex flex-col bg-stone-50 text-stone-900 font-sans" data-nonce={nonce ? 'active' : undefined}>
         {children}
       </body>
     </html>
