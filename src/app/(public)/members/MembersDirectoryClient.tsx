@@ -54,7 +54,7 @@ export function MembersDirectoryClient({ members }: { members: DirectoryMember[]
             rel="noopener noreferrer"
             className="group relative flex flex-col justify-between bg-white border border-stone-200/80 hover:border-stone-400/90 rounded-2xl p-6 sm:p-7 shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:shadow-[0_16px_36px_rgba(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 space-y-5"
           >
-            {/* Top Bar: Singularity Logo & Circular Action Button */}
+            {/* Top Bar: Singularity Logo & Minimalist Corner Arrow */}
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <div className="relative size-6 rounded-md bg-black p-1 flex items-center justify-center border border-black/90 shadow-xs shrink-0 group-hover:scale-105 transition-transform">
@@ -71,9 +71,7 @@ export function MembersDirectoryClient({ members }: { members: DirectoryMember[]
                 </span>
               </div>
 
-              <div className="size-8 rounded-full bg-stone-100 group-hover:bg-zinc-950 text-stone-500 group-hover:text-white flex items-center justify-center transition-all duration-300 shrink-0">
-                <ArrowUpRight className="size-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
-              </div>
+              <ArrowUpRight className="size-4.5 text-stone-300 group-hover:text-stone-950 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 shrink-0" />
             </div>
 
             {/* Profile Hero: Avatar & Main Identity */}
