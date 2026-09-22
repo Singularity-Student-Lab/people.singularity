@@ -21,10 +21,20 @@ async function saveUpload(
   buffer: Buffer,
   contentType: string
 ): Promise<{ url: string; filename: string }> {
-  // Support both default BLOB_READ_WRITE_TOKEN and prefixed VERCEL_BLOB_READ_WRITE_TOKEN
+  // Support standard BLOB_READ_WRITE_TOKEN or any custom prefix (e.g. VERCEL_BLOB_READ_WRITE_TOKEN, MEDIA_BLOB_READ_WRITE_TOKEN)
+  const findDynamicBlobToken = (): string | undefined => {
+    for (const key of Object.keys(process.env)) {
+      if (key.endsWith('_READ_WRITE_TOKEN') && process.env[key]) {
+        return process.env[key];
+      }
+    }
+    return undefined;
+  };
+
   const blobToken =
     process.env.BLOB_READ_WRITE_TOKEN ||
-    process.env.VERCEL_BLOB_READ_WRITE_TOKEN;
+    process.env.VERCEL_BLOB_READ_WRITE_TOKEN ||
+    findDynamicBlobToken();
 
   if (blobToken) {
     const blob = await put(pathname, buffer, {
