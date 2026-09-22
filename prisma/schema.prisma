@@ -1,0 +1,148 @@
+// Singularity Student Lab - Database Schema
+// Native PostgreSQL Configuration
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum ProjectStatus {
+  LIVE
+  IN_PROGRESS
+  ARCHIVED
+}
+
+enum SkillCategory {
+  CORE_LANGUAGES
+  FRAMEWORKS_LIBRARIES
+  SYSTEMS_INFRA
+  AI_ML
+  TOOLS_DEV
+}
+
+enum ActorType {
+  ADMIN
+  MEMBER
+  SYSTEM
+}
+
+model Member {
+  id                  String        @id @default(uuid())
+  slug                String        @unique
+  username            String        @unique
+  passwordHash        String
+  fullName            String
+  title               String
+  bio                 String        @db.Text
+  bioHighlights       String[]      @default([])
+  bookCallUrl         String?
+  email               String?
+  github              String?
+  twitter             String?
+  linkedin            String?
+  discord             String?
+  resumeUrl           String?
+  profileImageUrl     String?
+  githubUsername      String?
+  closingQuote        String?
+  quoteAuthor         String?
+  isActive            Boolean       @default(true)
+  mustChangePassword  Boolean       @default(true)
+  failedLoginAttempts Int           @default(0)
+  lockedUntil         DateTime?
+  tokenVersion        Int           @default(1)
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  experiences         Experience[]
+  projects            Project[]
+  skills              MemberSkill[]
+
+  @@index([slug])
+  @@index([username])
+}
+
+model Experience {
+  id          String    @id @default(uuid())
+  memberId    String
+  title       String
+  org         String
+  location    String
+  startDate   String
+  endDate     String?   // null means "Present"
+  description String    @db.Text
+  sortOrder   Int       @default(0)
+
+  member      Member    @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@index([memberId])
+}
+
+model Project {
+  id           String        @id @default(uuid())
+  memberId     String
+  name         String
+  thumbnailUrl String?
+  status       ProjectStatus @default(LIVE)
+  description  String        @db.Text
+  projectUrl   String?
+  techTags     String[]      @default([])
+  sortOrder    Int           @default(0)
+
+  member       Member        @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@index([memberId])
+}
+
+model Skill {
+  id        String        @id @default(uuid())
+  name      String        @unique
+  category  SkillCategory
+
+  members   MemberSkill[]
+
+  @@index([category])
+}
+
+model MemberSkill {
+  memberId  String
+  skillId   String
+  sortOrder Int      @default(0)
+
+  member    Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  skill     Skill    @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@id([memberId, skillId])
+}
+
+model Admin {
+  id           String    @id @default(uuid())
+  username     String    @unique
+  passwordHash String
+  name         String
+  email        String?
+  tokenVersion Int       @default(1)
+  createdAt    DateTime  @default(now())
+
+  @@index([username])
+}
+
+model AuditLog {
+  id         String    @id @default(uuid())
+  actorType  ActorType
+  actorId    String
+  action     String
+  targetType String
+  targetId   String?
+  ipAddress  String?
+  metadata   String?   @db.Text
+  createdAt  DateTime  @default(now())
+
+  @@index([actorId])
+  @@index([createdAt])
+}

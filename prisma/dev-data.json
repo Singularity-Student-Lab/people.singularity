@@ -1,0 +1,864 @@
+{
+  "admin": {
+    "id": "admin-singularity-root",
+    "username": "singularity@space.edu.in",
+    "passwordHash": "$2b$12$84kBRKwUvhjb1S5zHFxH.OrSrS81ALweKfw87yLX.QwfpVWuskbJG",
+    "name": "Singularity Lab Administrator",
+    "email": "singularity@space.edu.in",
+    "tokenVersion": 1,
+    "createdAt": "2026-01-01T00:00:00.000Z"
+  },
+  "members": [
+    {
+      "id": "member-1790019341672",
+      "slug": "yuvraj-singh3178",
+      "username": "YUVRAJ.SINGH3178",
+      "passwordHash": "$2b$12$L1RkH5m9ruwpmHJCZM3f5ePrCNkSKg61tL1NuRQUtlrLbl23KXRti",
+      "fullName": "YUVRAJ SINGH",
+      "title": "BHASKARACHRYA EXECUTIVE",
+      "bio": "B.Tech CS student at SRM University AP with experience in full-stack development, open-source contribution, and cybersecurity. \nHackathon finalist at national-level competitions. Ranked Top 15 Campus Ambassador nationwide at IIT Guwahati E-Cell. Active \nmember of IEEE Student Branch and Singularity Student Lab.",
+      "bioHighlights": [],
+      "bookCallUrl": null,
+      "email": null,
+      "github": "https://github.com/YUVRAJ-SINGH-3178",
+      "twitter": "https://x.com/Yuvraj_Singh317",
+      "linkedin": "https://www.linkedin.com/in/yuvraj-singh-3178saturn/",
+      "discord": null,
+      "resumeUrl": "/uploads/resume-d9fafa21-05c0-4ba4-b44f-434b32bd270f.pdf",
+      "profileImageUrl": "/uploads/avatar-f1d8d8f4-0ed6-4a66-b95e-1aaa0c2e6848.png",
+      "githubUsername": "YUVRAJ-SINGH-3178",
+      "closingQuote": null,
+      "quoteAuthor": "YUVRAJ SINGH",
+      "isActive": true,
+      "mustChangePassword": false,
+      "failedLoginAttempts": 0,
+      "lockedUntil": null,
+      "tokenVersion": 4,
+      "createdAt": "2026-09-21T19:35:41.672Z",
+      "updatedAt": "2026-09-21T19:51:43.807Z"
+    }
+  ],
+  "experiences": [
+    {
+      "id": "exp-1790019720917",
+      "memberId": "member-1790019341672",
+      "title": "Executive",
+      "org": "Singularity Student Lab",
+      "location": "SRM University AP",
+      "startDate": "2026",
+      "endDate": null,
+      "description": "",
+      "sortOrder": 0
+    },
+    {
+      "id": "exp-1790019769778",
+      "memberId": "member-1790019341672",
+      "title": "Technical Co-Lead",
+      "org": "Microsoft Student Community",
+      "location": "SRM University AP",
+      "startDate": "2026",
+      "endDate": null,
+      "description": "",
+      "sortOrder": 1
+    }
+  ],
+  "projects": [
+    {
+      "id": "proj-1790019817842",
+      "memberId": "member-1790019341672",
+      "name": "PoF",
+      "thumbnailUrl": null,
+      "status": "ARCHIVED",
+      "description": "An end-to-end verification pipeline that discovers candidate social profiles via genuine reverse-image search, mathematically re-verifies identity using biometric embedding distance, pins verified evidence to IPFS, and anchors an immutable, tamper-evident record onto a public blockchain testnet.",
+      "projectUrl": "https://github.com/YUVRAJ-SINGH-3178/PoF",
+      "techTags": [
+        "Python",
+        "Solidity",
+        "Dockerfile"
+      ],
+      "sortOrder": 0
+    },
+    {
+      "id": "proj-1790019895240",
+      "memberId": "member-1790019341672",
+      "name": "ULPF",
+      "thumbnailUrl": null,
+      "status": "ARCHIVED",
+      "description": "ULPF (Universal Log Pre-processing Framework) provides a high-assurance telemetry preprocessing and normalization pipeline positioned directly between perimeter devices and enterprise SIEM / Data Lake sinks. Built from first principles for strategic defence and critical national infrastructure",
+      "projectUrl": "https://github.com/YUVRAJ-SINGH-3178/ULPF",
+      "techTags": [
+        "Python",
+        "JavaScript",
+        "HTML",
+        "CSS",
+        "Dockerfile",
+        "Batchfile",
+        "Shell"
+      ],
+      "sortOrder": 1
+    },
+    {
+      "id": "proj-1790019976578",
+      "memberId": "member-1790019341672",
+      "name": "Etio",
+      "thumbnailUrl": null,
+      "status": "LIVE",
+      "description": "Etio is a GitHub composite Action that will investigate a failed CI job in the repository where it runs. It is designed to locate relevant failure context, compare the failure against recent commits, request a redacted diagnosis from Groq, and publish the result back to GitHub.",
+      "projectUrl": "https://github.com/YUVRAJ-SINGH-3178/Etio",
+      "techTags": [
+        "Python"
+      ],
+      "sortOrder": 2
+    }
+  ],
+  "skills": [
+    {
+      "id": "skill-python",
+      "name": "Python",
+      "category": "CORE_LANGUAGES"
+    },
+    {
+      "id": "skill-typescript",
+      "name": "TypeScript",
+      "category": "CORE_LANGUAGES"
+    },
+    {
+      "id": "skill-rust",
+      "name": "Rust",
+      "category": "CORE_LANGUAGES"
+    },
+    {
+      "id": "skill-cpp",
+      "name": "C++",
+      "category": "CORE_LANGUAGES"
+    },
+    {
+      "id": "skill-go",
+      "name": "Go",
+      "category": "CORE_LANGUAGES"
+    },
+    {
+      "id": "skill-julia",
+      "name": "Julia",
+      "category": "CORE_LANGUAGES"
+    },
+    {
+      "id": "skill-cuda",
+      "name": "CUDA",
+      "category": "CORE_LANGUAGES"
+    },
+    {
+      "id": "skill-sql",
+      "name": "SQL",
+      "category": "CORE_LANGUAGES"
+    },
+    {
+      "id": "skill-nextjs",
+      "name": "Next.js",
+      "category": "FRAMEWORKS_LIBRARIES"
+    },
+    {
+      "id": "skill-react",
+      "name": "React",
+      "category": "FRAMEWORKS_LIBRARIES"
+    },
+    {
+      "id": "skill-pytorch",
+      "name": "PyTorch",
+      "category": "FRAMEWORKS_LIBRARIES"
+    },
+    {
+      "id": "skill-jax",
+      "name": "JAX",
+      "category": "FRAMEWORKS_LIBRARIES"
+    },
+    {
+      "id": "skill-fastapi",
+      "name": "FastAPI",
+      "category": "FRAMEWORKS_LIBRARIES"
+    },
+    {
+      "id": "skill-tailwindcss",
+      "name": "Tailwind CSS",
+      "category": "FRAMEWORKS_LIBRARIES"
+    },
+    {
+      "id": "skill-dist-systems",
+      "name": "Distributed Systems",
+      "category": "SYSTEMS_INFRA"
+    },
+    {
+      "id": "skill-linux-kernel",
+      "name": "Linux Kernel",
+      "category": "SYSTEMS_INFRA"
+    },
+    {
+      "id": "skill-docker",
+      "name": "Docker",
+      "category": "SYSTEMS_INFRA"
+    },
+    {
+      "id": "skill-kubernetes",
+      "name": "Kubernetes",
+      "category": "SYSTEMS_INFRA"
+    },
+    {
+      "id": "skill-wasm",
+      "name": "WebAssembly",
+      "category": "SYSTEMS_INFRA"
+    },
+    {
+      "id": "skill-postgresql",
+      "name": "PostgreSQL",
+      "category": "SYSTEMS_INFRA"
+    },
+    {
+      "id": "skill-redis",
+      "name": "Redis",
+      "category": "SYSTEMS_INFRA"
+    },
+    {
+      "id": "skill-llms",
+      "name": "LLMs",
+      "category": "AI_ML"
+    },
+    {
+      "id": "skill-transformers",
+      "name": "Transformers",
+      "category": "AI_ML"
+    },
+    {
+      "id": "skill-rl",
+      "name": "Reinforcement Learning",
+      "category": "AI_ML"
+    },
+    {
+      "id": "skill-formal-math",
+      "name": "Formal Theorem Proving",
+      "category": "AI_ML"
+    },
+    {
+      "id": "skill-quantum",
+      "name": "Quantum Information",
+      "category": "AI_ML"
+    },
+    {
+      "id": "skill-cv",
+      "name": "Computer Vision",
+      "category": "AI_ML"
+    },
+    {
+      "id": "skill-git",
+      "name": "Git",
+      "category": "TOOLS_DEV"
+    },
+    {
+      "id": "skill-linux-bash",
+      "name": "Linux / Shell",
+      "category": "TOOLS_DEV"
+    },
+    {
+      "id": "skill-cicd",
+      "name": "CI/CD Automation",
+      "category": "TOOLS_DEV"
+    },
+    {
+      "id": "skill-prisma",
+      "name": "Prisma ORM",
+      "category": "TOOLS_DEV"
+    },
+    {
+      "id": "skill-ebpf",
+      "name": "eBPF Telemetry",
+      "category": "TOOLS_DEV"
+    }
+  ],
+  "memberSkills": [
+    {
+      "memberId": "member-1790019341672",
+      "skillId": "skill-python",
+      "sortOrder": 0
+    },
+    {
+      "memberId": "member-1790019341672",
+      "skillId": "skill-typescript",
+      "sortOrder": 1
+    },
+    {
+      "memberId": "member-1790019341672",
+      "skillId": "skill-rust",
+      "sortOrder": 2
+    },
+    {
+      "memberId": "member-1790019341672",
+      "skillId": "skill-cpp",
+      "sortOrder": 3
+    },
+    {
+      "memberId": "member-1790019341672",
+      "skillId": "skill-nextjs",
+      "sortOrder": 4
+    },
+    {
+      "memberId": "member-1790019341672",
+      "skillId": "skill-react",
+      "sortOrder": 5
+    },
+    {
+      "memberId": "member-1790019341672",
+      "skillId": "skill-pytorch",
+      "sortOrder": 6
+    },
+    {
+      "memberId": "member-1790019341672",
+      "skillId": "skill-fastapi",
+      "sortOrder": 7
+    },
+    {
+      "memberId": "member-1790019341672",
+      "skillId": "skill-tailwindcss",
+      "sortOrder": 8
+    },
+    {
+      "memberId": "member-1790019341672",
+      "skillId": "skill-sql",
+      "sortOrder": 9
+    },
+    {
+      "memberId": "member-1790019341672",
+      "skillId": "skill-dist-systems",
+      "sortOrder": 10
+    },
+    {
+      "memberId": "member-1790019341672",
+      "skillId": "skill-docker",
+      "sortOrder": 11
+    },
+    {
+      "memberId": "member-1790019341672",
+      "skillId": "skill-kubernetes",
+      "sortOrder": 12
+    },
+    {
+      "memberId": "member-1790019341672",
+      "skillId": "skill-redis",
+      "sortOrder": 13
+    },
+    {
+      "memberId": "member-1790019341672",
+      "skillId": "skill-postgresql",
+      "sortOrder": 14
+    },
+    {
+      "memberId": "member-1790019341672",
+      "skillId": "skill-cv",
+      "sortOrder": 15
+    },
+    {
+      "memberId": "member-1790019341672",
+      "skillId": "skill-llms",
+      "sortOrder": 16
+    },
+    {
+      "memberId": "member-1790019341672",
+      "skillId": "skill-git",
+      "sortOrder": 17
+    },
+    {
+      "memberId": "member-1790019341672",
+      "skillId": "skill-linux-bash",
+      "sortOrder": 18
+    },
+    {
+      "memberId": "member-1790019341672",
+      "skillId": "skill-cicd",
+      "sortOrder": 19
+    }
+  ],
+  "auditLogs": [
+    {
+      "id": "audit-1790082026944-lmwh",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "LOGIN_SUCCESS",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": "::1",
+      "metadata": null,
+      "createdAt": "2026-09-22T13:00:26.945Z"
+    },
+    {
+      "id": "audit-1790082000161-5hx1",
+      "actorType": "ADMIN",
+      "actorId": "admin-singularity-root",
+      "action": "LOGOUT",
+      "targetType": "Session",
+      "targetId": null,
+      "ipAddress": null,
+      "metadata": null,
+      "createdAt": "2026-09-22T13:00:00.161Z"
+    },
+    {
+      "id": "audit-1790081968344-sgpi",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "PASSWORD_CHANGED",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": null,
+      "metadata": null,
+      "createdAt": "2026-09-22T12:59:28.344Z"
+    },
+    {
+      "id": "audit-1790081944376-3l58",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "LOGIN_SUCCESS",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": "::1",
+      "metadata": null,
+      "createdAt": "2026-09-22T12:59:04.376Z"
+    },
+    {
+      "id": "audit-1790081926535-ia8d",
+      "actorType": "ADMIN",
+      "actorId": "admin-singularity-root",
+      "action": "PASSWORD_RESET_BY_ADMIN",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": null,
+      "metadata": "{\"tokenVersionBumped\":true}",
+      "createdAt": "2026-09-22T12:58:46.535Z"
+    },
+    {
+      "id": "audit-1790081890390-ywi1",
+      "actorType": "SYSTEM",
+      "actorId": "auth",
+      "action": "LOGIN_FAILURE",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": "::1",
+      "metadata": null,
+      "createdAt": "2026-09-22T12:58:10.390Z"
+    },
+    {
+      "id": "audit-1790081871619-3bby",
+      "actorType": "SYSTEM",
+      "actorId": "auth",
+      "action": "LOGIN_FAILURE",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": "::1",
+      "metadata": null,
+      "createdAt": "2026-09-22T12:57:51.619Z"
+    },
+    {
+      "id": "audit-1790081853787-8xnm",
+      "actorType": "ADMIN",
+      "actorId": "admin-singularity-root",
+      "action": "ADMIN_LOGIN_SUCCESS",
+      "targetType": "Admin",
+      "targetId": "admin-singularity-root",
+      "ipAddress": "::1",
+      "metadata": null,
+      "createdAt": "2026-09-22T12:57:33.787Z"
+    },
+    {
+      "id": "audit-1790081827637-xik2",
+      "actorType": "SYSTEM",
+      "actorId": "auth",
+      "action": "LOGIN_UNKNOWN_USER",
+      "targetType": "Unknown",
+      "targetId": null,
+      "ipAddress": "::1",
+      "metadata": "{\"usernameAttempt\":\"YUVRAJ-SINGH3178\"}",
+      "createdAt": "2026-09-22T12:57:07.637Z"
+    },
+    {
+      "id": "audit-1790081792245-dq3x",
+      "actorType": "ADMIN",
+      "actorId": "admin-singularity-root",
+      "action": "LOGOUT",
+      "targetType": "Session",
+      "targetId": null,
+      "ipAddress": null,
+      "metadata": null,
+      "createdAt": "2026-09-22T12:56:32.245Z"
+    },
+    {
+      "id": "audit-1790081527844-n7e3",
+      "actorType": "SYSTEM",
+      "actorId": "auth",
+      "action": "LOGIN_UNKNOWN_USER",
+      "targetType": "Unknown",
+      "targetId": null,
+      "ipAddress": "::1",
+      "metadata": "{\"usernameAttempt\":\"wrong.user\"}",
+      "createdAt": "2026-09-22T12:52:07.844Z"
+    },
+    {
+      "id": "audit-1790081510506-ft1r",
+      "actorType": "ADMIN",
+      "actorId": "admin-singularity-root",
+      "action": "ADMIN_LOGIN_SUCCESS",
+      "targetType": "Admin",
+      "targetId": "admin-singularity-root",
+      "ipAddress": "::1",
+      "metadata": null,
+      "createdAt": "2026-09-22T12:51:50.506Z"
+    },
+    {
+      "id": "audit-1790079609430-33r3",
+      "actorType": "ADMIN",
+      "actorId": "admin-singularity-root",
+      "action": "ADMIN_LOGIN_SUCCESS",
+      "targetType": "Admin",
+      "targetId": "admin-singularity-root",
+      "ipAddress": "::1",
+      "metadata": null,
+      "createdAt": "2026-09-22T12:20:09.430Z"
+    },
+    {
+      "id": "audit-1790020303812-tmg5",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "PROFILE_UPDATED",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": null,
+      "metadata": null,
+      "createdAt": "2026-09-21T19:51:43.812Z"
+    },
+    {
+      "id": "audit-1790020274548-g6ww",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "PROFILE_UPDATED",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": null,
+      "metadata": null,
+      "createdAt": "2026-09-21T19:51:14.548Z"
+    },
+    {
+      "id": "audit-1790020271343-9k43",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "PROFILE_UPDATED",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": null,
+      "metadata": null,
+      "createdAt": "2026-09-21T19:51:11.343Z"
+    },
+    {
+      "id": "audit-1790020043346-qa3b",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "SKILLS_UPDATED",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": null,
+      "metadata": "{\"skillCount\":20}",
+      "createdAt": "2026-09-21T19:47:23.347Z"
+    },
+    {
+      "id": "audit-1790020042554-6pay",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "SKILLS_UPDATED",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": null,
+      "metadata": "{\"skillCount\":19}",
+      "createdAt": "2026-09-21T19:47:22.554Z"
+    },
+    {
+      "id": "audit-1790020041795-pmj0",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "SKILLS_UPDATED",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": null,
+      "metadata": "{\"skillCount\":18}",
+      "createdAt": "2026-09-21T19:47:21.795Z"
+    },
+    {
+      "id": "audit-1790020040837-46er",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "SKILLS_UPDATED",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": null,
+      "metadata": "{\"skillCount\":17}",
+      "createdAt": "2026-09-21T19:47:20.837Z"
+    },
+    {
+      "id": "audit-1790020039116-jsqn",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "SKILLS_UPDATED",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": null,
+      "metadata": "{\"skillCount\":16}",
+      "createdAt": "2026-09-21T19:47:19.116Z"
+    },
+    {
+      "id": "audit-1790020035219-iqg3",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "SKILLS_UPDATED",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": null,
+      "metadata": "{\"skillCount\":15}",
+      "createdAt": "2026-09-21T19:47:15.219Z"
+    },
+    {
+      "id": "audit-1790020034524-7i67",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "SKILLS_UPDATED",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": null,
+      "metadata": "{\"skillCount\":14}",
+      "createdAt": "2026-09-21T19:47:14.524Z"
+    },
+    {
+      "id": "audit-1790020033927-6obp",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "SKILLS_UPDATED",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": null,
+      "metadata": "{\"skillCount\":13}",
+      "createdAt": "2026-09-21T19:47:13.928Z"
+    },
+    {
+      "id": "audit-1790020033277-jj0h",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "SKILLS_UPDATED",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": null,
+      "metadata": "{\"skillCount\":14}",
+      "createdAt": "2026-09-21T19:47:13.277Z"
+    },
+    {
+      "id": "audit-1790020032396-r7s2",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "SKILLS_UPDATED",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": null,
+      "metadata": "{\"skillCount\":13}",
+      "createdAt": "2026-09-21T19:47:12.396Z"
+    },
+    {
+      "id": "audit-1790020031687-d9pq",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "SKILLS_UPDATED",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": null,
+      "metadata": "{\"skillCount\":12}",
+      "createdAt": "2026-09-21T19:47:11.687Z"
+    },
+    {
+      "id": "audit-1790020030632-9se5",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "SKILLS_UPDATED",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": null,
+      "metadata": "{\"skillCount\":11}",
+      "createdAt": "2026-09-21T19:47:10.632Z"
+    },
+    {
+      "id": "audit-1790020028204-32vo",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "SKILLS_UPDATED",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": null,
+      "metadata": "{\"skillCount\":10}",
+      "createdAt": "2026-09-21T19:47:08.204Z"
+    },
+    {
+      "id": "audit-1790020027372-g1mz",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "SKILLS_UPDATED",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": null,
+      "metadata": "{\"skillCount\":9}",
+      "createdAt": "2026-09-21T19:47:07.372Z"
+    },
+    {
+      "id": "audit-1790020026713-2jxo",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "SKILLS_UPDATED",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": null,
+      "metadata": "{\"skillCount\":8}",
+      "createdAt": "2026-09-21T19:47:06.713Z"
+    },
+    {
+      "id": "audit-1790020025002-ed7h",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "SKILLS_UPDATED",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": null,
+      "metadata": "{\"skillCount\":7}",
+      "createdAt": "2026-09-21T19:47:05.002Z"
+    },
+    {
+      "id": "audit-1790020024141-klu8",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "SKILLS_UPDATED",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": null,
+      "metadata": "{\"skillCount\":6}",
+      "createdAt": "2026-09-21T19:47:04.141Z"
+    },
+    {
+      "id": "audit-1790020023277-sp7x",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "SKILLS_UPDATED",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": null,
+      "metadata": "{\"skillCount\":5}",
+      "createdAt": "2026-09-21T19:47:03.277Z"
+    },
+    {
+      "id": "audit-1790020021825-th63",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "SKILLS_UPDATED",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": null,
+      "metadata": "{\"skillCount\":4}",
+      "createdAt": "2026-09-21T19:47:01.825Z"
+    },
+    {
+      "id": "audit-1790020020863-i151",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "SKILLS_UPDATED",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": null,
+      "metadata": "{\"skillCount\":3}",
+      "createdAt": "2026-09-21T19:47:00.863Z"
+    },
+    {
+      "id": "audit-1790020020153-uvk1",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "SKILLS_UPDATED",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": null,
+      "metadata": "{\"skillCount\":2}",
+      "createdAt": "2026-09-21T19:47:00.154Z"
+    },
+    {
+      "id": "audit-1790020020074-4mbj",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "SKILLS_UPDATED",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": null,
+      "metadata": "{\"skillCount\":1}",
+      "createdAt": "2026-09-21T19:47:00.074Z"
+    },
+    {
+      "id": "audit-1790019485468-jpum",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "RESUME_UPLOADED",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": null,
+      "metadata": "{\"filename\":\"resume-d9fafa21-05c0-4ba4-b44f-434b32bd270f.pdf\"}",
+      "createdAt": "2026-09-21T19:38:05.468Z"
+    },
+    {
+      "id": "audit-1790019472989-khhe",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "AVATAR_UPLOADED",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": null,
+      "metadata": "{\"filename\":\"avatar-f1d8d8f4-0ed6-4a66-b95e-1aaa0c2e6848.png\"}",
+      "createdAt": "2026-09-21T19:37:52.989Z"
+    },
+    {
+      "id": "audit-1790019452782-7w3g",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "PASSWORD_CHANGED",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": null,
+      "metadata": null,
+      "createdAt": "2026-09-21T19:37:32.782Z"
+    },
+    {
+      "id": "audit-1790019389535-3b8j",
+      "actorType": "MEMBER",
+      "actorId": "member-1790019341672",
+      "action": "LOGIN_SUCCESS",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": "::1",
+      "metadata": null,
+      "createdAt": "2026-09-21T19:36:29.535Z"
+    },
+    {
+      "id": "audit-1790019365643-qkai",
+      "actorType": "ADMIN",
+      "actorId": "admin-singularity-root",
+      "action": "LOGOUT",
+      "targetType": "Session",
+      "targetId": null,
+      "ipAddress": null,
+      "metadata": null,
+      "createdAt": "2026-09-21T19:36:05.643Z"
+    },
+    {
+      "id": "audit-1790019341677-08xw",
+      "actorType": "ADMIN",
+      "actorId": "admin-singularity-root",
+      "action": "MEMBER_CREATED",
+      "targetType": "Member",
+      "targetId": "member-1790019341672",
+      "ipAddress": null,
+      "metadata": "{\"username\":\"YUVRAJ.SINGH3178\",\"slug\":\"yuvraj-singh3178\"}",
+      "createdAt": "2026-09-21T19:35:41.677Z"
+    }
+  ]
+}
