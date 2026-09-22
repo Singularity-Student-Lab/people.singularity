@@ -77,7 +77,7 @@ export function PublicNavbar() {
         <div
           role="navigation"
           aria-label="Navigation"
-          className="relative flex items-center h-10 sm:h-11 px-2.5 sm:px-4 bg-zinc-950 text-zinc-50 rounded-b-[20px] sm:rounded-b-[24px] shadow-sm gap-2 sm:gap-3.5 select-none max-w-full"
+          className="relative flex items-center h-10 sm:h-11 px-2.5 sm:px-4 bg-zinc-950 text-zinc-50 rounded-b-[20px] sm:rounded-b-[24px] shadow-sm gap-2 sm:gap-3.5 select-none max-w-full font-absans"
         >
           <NotchLeftWing position="top" className="text-zinc-950" />
           <NotchRightWing position="top" className="text-zinc-950" />

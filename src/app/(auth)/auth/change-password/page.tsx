@@ -72,7 +72,7 @@ export default function ChangePasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] flex flex-col justify-center py-12 sm:py-16 px-4 sm:px-6 lg:px-8 font-sans text-stone-900">
+    <div className="min-h-screen bg-[#FAF8F5] flex flex-col justify-center py-12 sm:py-16 px-4 sm:px-6 lg:px-8 font-sans font-absans text-stone-900">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center space-y-3">
         <Link href="/" className="inline-flex flex-col items-center gap-3 group">
           <div className="size-13 rounded-2xl bg-black p-2.5 flex items-center justify-center shadow-[0_4px_12px_rgba(0,0,0,0.08)] border border-stone-800 group-hover:scale-105 transition-transform duration-200">

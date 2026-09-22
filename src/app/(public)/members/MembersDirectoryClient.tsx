@@ -98,7 +98,7 @@ export function MembersDirectoryClient({ members }: { members: DirectoryMember[]
                   <h2 className="font-serif text-xl sm:text-2xl font-normal text-stone-950 group-hover:text-black tracking-tight leading-tight transition-colors">
                     {member.fullName}
                   </h2>
-                  <p className="font-mono text-[11px] text-stone-500 uppercase tracking-wider line-clamp-1">
+                  <p className="font-absans text-xs text-stone-500 uppercase tracking-wider line-clamp-1 font-medium">
                     {member.title}
                   </p>
                 </div>
@@ -106,7 +106,7 @@ export function MembersDirectoryClient({ members }: { members: DirectoryMember[]
 
               {/* Bio Excerpt */}
               {member.bio && (
-                <p className="text-xs text-stone-600 font-light leading-relaxed line-clamp-2 pt-1">
+                <p className="font-absans text-xs text-stone-600 font-normal leading-relaxed line-clamp-2 pt-1">
                   {member.bio}
                 </p>
               )}
@@ -117,13 +117,13 @@ export function MembersDirectoryClient({ members }: { members: DirectoryMember[]
                   {member.skills.slice(0, 4).map((s, idx) => (
                     <span
                       key={idx}
-                      className="px-2.5 py-1 text-[11px] font-mono text-stone-700 bg-stone-50 border border-stone-200/70 rounded-md group-hover:border-stone-300 group-hover:bg-stone-100/80 transition-colors"
+                      className="font-absans px-2.5 py-1 text-xs text-stone-700 bg-stone-50 border border-stone-200/70 rounded-md group-hover:border-stone-300 group-hover:bg-stone-100/80 transition-colors"
                     >
                       {s.skill.name}
                     </span>
                   ))}
                   {member.skills.length > 4 && (
-                    <span className="px-2 py-1 text-[10px] font-mono text-stone-400 bg-transparent border border-dashed border-stone-300 rounded-md">
+                    <span className="font-absans px-2 py-1 text-[11px] text-stone-400 bg-transparent border border-dashed border-stone-300 rounded-md">
                       +{member.skills.length - 4}
                     </span>
                   )}
@@ -132,11 +132,11 @@ export function MembersDirectoryClient({ members }: { members: DirectoryMember[]
             </div>
 
             {/* Bottom Footer: Verification & Prompt */}
-            <div className="pt-3 border-t border-stone-100 flex items-center justify-between text-xs font-mono text-stone-500">
+            <div className="pt-3 border-t border-stone-100 flex items-center justify-between text-xs font-absans text-stone-500">
               <span className="font-medium text-stone-800 group-hover:text-black group-hover:underline underline-offset-4 transition-colors">
                 View Portfolio
               </span>
-              <span className="inline-flex items-center gap-1 text-[10px] uppercase tracking-wider text-stone-400">
+              <span className="inline-flex items-center gap-1 text-[11px] uppercase tracking-wider text-stone-400">
                 <ShieldCheck className="size-3 text-emerald-600" />
                 <span>Verified</span>
               </span>

@@ -35,7 +35,7 @@ export default function AboutPage() {
                 <span className="block font-mono text-xs sm:text-sm 2xl:text-base font-semibold tracking-wider text-stone-900 uppercase">
                   01 VISION
                 </span>
-                <p className="text-base sm:text-lg 2xl:text-xl text-stone-800 leading-relaxed font-normal">
+                <p className="font-absans text-base sm:text-lg 2xl:text-xl text-stone-800 leading-relaxed font-normal">
                   &ldquo;We aim to revolutionize the future of technology by driving groundbreaking research and fostering an environment where innovation knows no bounds. Through inclusive collaboration, we strive to create transformative solutions that bridge the gap between ideas and real-world impact.&rdquo;
                 </p>
               </div>
@@ -48,7 +48,7 @@ export default function AboutPage() {
                 <span className="block font-mono text-xs sm:text-sm 2xl:text-base font-semibold tracking-wider text-stone-900 uppercase">
                   02 MISSION
                 </span>
-                <p className="text-base sm:text-lg 2xl:text-xl text-stone-800 leading-relaxed font-normal">
+                <p className="font-absans text-base sm:text-lg 2xl:text-xl text-stone-800 leading-relaxed font-normal">
                   &ldquo;To push the limits of technological advancement with cutting-edge tools and research-driven innovation. We are dedicated to knowledge sharing and empowering the next generation of tech leaders, ensuring a future where technology serves all.&rdquo;
                 </p>
               </div>

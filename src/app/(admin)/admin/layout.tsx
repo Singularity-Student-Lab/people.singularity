@@ -11,7 +11,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] flex flex-col font-sans text-stone-900">
+    <div className="min-h-screen bg-[#FAF8F5] flex flex-col font-sans font-absans text-stone-900">
       <AdminNavbar />
 
       {/* Admin Content */}

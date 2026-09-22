@@ -41,7 +41,7 @@ export default async function HomePage() {
           <h1 className="font-serif text-3xl sm:text-4xl 2xl:text-5xl text-stone-950 font-normal tracking-tight">
             Member Directory
           </h1>
-          <p className="text-stone-600 text-sm sm:text-base 2xl:text-lg mt-1.5 font-normal">
+          <p className="font-absans text-stone-600 text-sm sm:text-base 2xl:text-lg mt-1.5 font-normal leading-relaxed">
             Student members and builders at the Singularity Student Lab, SRM University AP.
           </p>
         </div>

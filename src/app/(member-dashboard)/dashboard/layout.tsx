@@ -16,7 +16,7 @@ export default async function MemberDashboardLayout({ children }: { children: Re
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF8F5] flex flex-col font-sans text-stone-900">
+    <div className="min-h-screen bg-[#FAF8F5] flex flex-col font-sans font-absans text-stone-900">
       <MemberNavbar memberSlug={auth.member.slug} />
 
       {/* Main Workspace Area */}

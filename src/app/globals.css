@@ -1,8 +1,23 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Absans';
+  src: url('/fonts/Absans-Regular.woff2') format('woff2'),
+       url('/fonts/Absans-Regular.woff') format('woff'),
+       url('/fonts/Absans-Regular.otf') format('opentype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   --font-serif: var(--font-serif), Georgia, serif;
   --font-sans: var(--font-sans), system-ui, sans-serif;
+  --font-absans: var(--font-absans), 'Absans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.font-absans {
+  font-family: var(--font-absans), 'Absans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 :root {

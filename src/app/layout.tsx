@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Newsreader, Inter } from 'next/font/google';
+import localFont from 'next/font/local';
 import './globals.css';
 
 const newsreader = Newsreader({
@@ -12,6 +13,23 @@ const newsreader = Newsreader({
 const inter = Inter({
   variable: '--font-sans',
   subsets: ['latin'],
+  display: 'swap',
+});
+
+const absans = localFont({
+  src: [
+    {
+      path: '../../public/fonts/Absans-Regular.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/Absans-Regular.woff',
+      weight: '400',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-absans',
   display: 'swap',
 });
 
@@ -73,7 +91,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${newsreader.variable} ${inter.variable} h-full antialiased`}
+      className={`${newsreader.variable} ${inter.variable} ${absans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-stone-50 text-stone-900 font-sans">
         {children}
