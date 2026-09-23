@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import {
   ExternalLink,
@@ -73,6 +73,14 @@ export function MemberPortfolioTemplate({ member, githubData }: TemplateProps) {
   const [showAllExperiences, setShowAllExperiences] = useState(false);
   const [expandedExperienceIds, setExpandedExperienceIds] = useState<Record<string, boolean>>({});
   const [imgError, setImgError] = useState(false);
+  const heatmapScrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // On small screens, initially scroll heatmap to show the most recent days/weeks
+    if (heatmapScrollRef.current && window.innerWidth < 768) {
+      heatmapScrollRef.current.scrollLeft = heatmapScrollRef.current.scrollWidth;
+    }
+  }, [githubData]);
 
   const toggleExperienceCollapse = (id: string) => {
     setExpandedExperienceIds((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -430,19 +438,19 @@ export function MemberPortfolioTemplate({ member, githubData }: TemplateProps) {
             </a>
           </div>
 
-          <div className="p-5 sm:p-6 2xl:p-7 bg-white border border-stone-200/80 rounded-xl sm:rounded-2xl shadow-2xs space-y-4">
+          <div className="p-4 sm:p-6 2xl:p-7 bg-white border border-stone-200/80 rounded-xl sm:rounded-2xl shadow-2xs space-y-4 overflow-hidden">
             <div>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs font-mono text-stone-600 mb-3 pb-2 border-b border-stone-100 gap-1">
                 <span className="font-medium text-stone-800 text-[11px]">
                   Activity Heatmap
                 </span>
                 <span className="text-[11px] text-stone-500">
-                  {githubData.totalPublicEvents} public event{githubData.totalPublicEvents === 1 ? '' : 's'} • Past 52 Weeks
+                  {githubData.totalPublicEvents} contribution{githubData.totalPublicEvents === 1 ? '' : 's'} • Past 52 Weeks
                 </span>
               </div>
 
               {/* Heatmap Grid */}
-              <div className="overflow-x-auto pb-2 -mx-1 px-1">
+              <div className="overflow-x-auto pb-2 -mx-1 px-1 scroll-smooth" ref={heatmapScrollRef}>
                 <div className="min-w-[690px] pt-1">
                   <div className="flex gap-[3px] ml-7 mb-1.5 text-[10px] font-mono text-stone-500 select-none h-4">
                     {githubData.heatmapWeeks.map((week, wIdx) => (
@@ -472,11 +480,11 @@ export function MemberPortfolioTemplate({ member, githubData }: TemplateProps) {
                         <div key={wIdx} className="flex flex-col gap-[3px] shrink-0">
                           {week.days.map((day, dIdx) => {
                             const cellColor = {
-                              0: 'bg-stone-100 border border-stone-200/60',
-                              1: 'bg-emerald-200 border border-emerald-300',
-                              2: 'bg-emerald-400 border border-emerald-500',
-                              3: 'bg-emerald-600 border border-emerald-700',
-                              4: 'bg-emerald-800 border border-emerald-900',
+                              0: 'bg-[#ebedf0] border border-[#d0d7de] hover:border-stone-400',
+                              1: 'bg-[#9be9a8] border border-[#7ed88f]',
+                              2: 'bg-[#40c463] border border-[#34a853]',
+                              3: 'bg-[#30a14e] border border-[#238636]',
+                              4: 'bg-[#216e39] border border-[#196127]',
                             }[day.level];
                             return (
                               <div
@@ -499,38 +507,47 @@ export function MemberPortfolioTemplate({ member, githubData }: TemplateProps) {
                 </span>
                 <div className="flex items-center gap-1.5 select-none">
                   <span className="text-[10px]">Less</span>
-                  <span className="size-2.5 rounded-[1px] bg-stone-100 border border-stone-200/60" />
-                  <span className="size-2.5 rounded-[1px] bg-emerald-200 border border-emerald-300" />
-                  <span className="size-2.5 rounded-[1px] bg-emerald-400 border border-emerald-500" />
-                  <span className="size-2.5 rounded-[1px] bg-emerald-600 border border-emerald-700" />
-                  <span className="size-2.5 rounded-[1px] bg-emerald-800 border border-emerald-900" />
+                  <span className="size-2.5 rounded-[1px] bg-[#ebedf0] border border-[#d0d7de]" />
+                  <span className="size-2.5 rounded-[1px] bg-[#9be9a8] border border-[#7ed88f]" />
+                  <span className="size-2.5 rounded-[1px] bg-[#40c463] border border-[#34a853]" />
+                  <span className="size-2.5 rounded-[1px] bg-[#30a14e] border border-[#238636]" />
+                  <span className="size-2.5 rounded-[1px] bg-[#216e39] border border-[#196127]" />
                   <span className="text-[10px]">More</span>
                 </div>
               </div>
             </div>
 
             {githubData.recentPRs && githubData.recentPRs.length > 0 && (
-              <div className="pt-3 border-t border-stone-100 space-y-2">
+              <div className="pt-3 border-t border-stone-100 space-y-2 overflow-hidden w-full">
                 <span className="text-xs font-mono uppercase tracking-wider text-stone-500 block">
                   Recent Contributions
                 </span>
-                <div className="space-y-1.5">
+                <div className="space-y-1.5 w-full overflow-hidden">
                   {githubData.recentPRs.map((pr, pIdx) => (
-                    <div key={pIdx} className="flex items-start justify-between gap-3 text-xs">
-                      <div className="flex items-center gap-2 min-w-0">
+                    <div
+                      key={pIdx}
+                      className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-3 py-1.5 border-b border-stone-100 last:border-0 min-w-0 overflow-hidden"
+                    >
+                      <div className="flex items-center gap-2 min-w-0 overflow-hidden">
                         <GitPullRequest className="size-3.5 text-stone-400 shrink-0" />
                         <a
                           href={pr.prUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-stone-800 hover:text-stone-950 truncate font-normal underline decoration-stone-300 underline-offset-2"
+                          className="text-stone-800 hover:text-stone-950 font-normal underline decoration-stone-300 underline-offset-2 truncate block min-w-0 text-xs"
+                          title={pr.title}
                         >
                           {pr.title}
                         </a>
                       </div>
-                      <span className="font-mono text-stone-400 text-[11px] shrink-0">
-                        {pr.repoName}
-                      </span>
+                      <div className="flex items-center pl-5.5 sm:pl-0 shrink-0 min-w-0 max-w-full">
+                        <span
+                          className="font-mono text-stone-400 text-[10px] sm:text-[11px] truncate block max-w-[260px] sm:max-w-[220px]"
+                          title={pr.repoName}
+                        >
+                          {pr.repoName}
+                        </span>
+                      </div>
                     </div>
                   ))}
                 </div>

@@ -85,7 +85,7 @@ function LoginFormContent() {
   };
 
   return (
-    <div className="bg-white border border-stone-200/90 rounded-2xl p-7 sm:p-9 shadow-[0_8px_30px_rgba(0,0,0,0.04)] space-y-6">
+    <div className="bg-white border border-stone-200/90 rounded-2xl p-5 sm:p-9 shadow-[0_8px_30px_rgba(0,0,0,0.04)] space-y-5 sm:space-y-6">
       <div className="border-b border-stone-100 pb-4 space-y-1">
         <h2 className="font-serif text-2xl sm:text-3xl text-stone-950 font-normal tracking-tight">
           Sign In
@@ -140,7 +140,7 @@ function LoginFormContent() {
         </div>
 
         {/* Cloudflare Turnstile Human Verification */}
-        <div className="p-4 bg-stone-50/70 border border-stone-200/80 rounded-xl space-y-3">
+        <div className="p-3 sm:p-4 bg-stone-50/70 border border-stone-200/80 rounded-xl space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5 text-stone-800">
               <ShieldCheck className="size-4 text-stone-600" />
@@ -151,7 +151,7 @@ function LoginFormContent() {
             <span className="text-[10px] font-mono text-stone-400">Cloudflare Turnstile</span>
           </div>
 
-          <div className="flex justify-center py-1 overflow-hidden min-h-[65px] items-center">
+          <div className="flex justify-center py-1.5 w-full min-h-[72px] items-center overflow-x-auto overflow-y-visible">
             <Turnstile
               ref={turnstileRef}
               siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000AA'}
@@ -160,7 +160,7 @@ function LoginFormContent() {
               onError={() => setError('Verification challenge failed to load. Please refresh.')}
               options={{
                 theme: 'light',
-                size: 'normal',
+                size: 'flexible',
               }}
             />
           </div>
