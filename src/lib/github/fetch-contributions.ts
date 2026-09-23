@@ -157,7 +157,7 @@ function buildHeatmapWeeksFromContributions(contributions: RawContributionDay[])
         const weekDate = new Date(firstValidDay.date + 'T00:00:00Z');
         const month = weekDate.getUTCMonth();
         if (month !== lastMonth) {
-          if (weeks.length - lastLabelWeek >= 3 && weeks.length < 50) {
+          if (weeks.length - lastLabelWeek >= 2 && weeks.length < 53) {
             monthLabel = weekDate.toLocaleString('en-US', { month: 'short', timeZone: 'UTC' });
             lastLabelWeek = weeks.length;
           }

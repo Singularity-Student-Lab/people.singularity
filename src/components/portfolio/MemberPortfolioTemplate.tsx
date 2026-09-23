@@ -451,33 +451,48 @@ export function MemberPortfolioTemplate({ member, githubData }: TemplateProps) {
 
               {/* Heatmap Grid */}
               <div className="overflow-x-auto pb-2 -mx-1 px-1 scroll-smooth" ref={heatmapScrollRef}>
-                <div className="min-w-[690px] pt-1">
-                  <div className="flex gap-[3px] ml-7 mb-1.5 text-[10px] font-mono text-stone-500 select-none h-4">
-                    {githubData.heatmapWeeks.map((week, wIdx) => (
-                      <div key={wIdx} className="w-2.5 sm:w-3 shrink-0 text-left relative overflow-visible">
-                        {week.monthLabel ? (
-                          <span className="absolute left-0 top-0 whitespace-nowrap font-medium text-stone-600">
-                            {week.monthLabel}
-                          </span>
-                        ) : null}
-                      </div>
-                    ))}
+                <div className="w-full min-w-[700px] pt-1">
+                  {/* Month Labels */}
+                  <div className="grid grid-cols-[20px_1fr] sm:grid-cols-[24px_1fr] gap-2 mb-1.5 text-[10px] font-mono text-stone-500 select-none h-4">
+                    <div />
+                    <div
+                      className="w-full grid"
+                      style={{
+                        gridTemplateColumns: `repeat(${githubData.heatmapWeeks.length}, minmax(0, 1fr))`,
+                        gap: '3px',
+                      }}
+                    >
+                      {githubData.heatmapWeeks.map((week, wIdx) => (
+                        <div key={wIdx} className="relative overflow-visible">
+                          {week.monthLabel ? (
+                            <span className="absolute left-0 top-0 whitespace-nowrap font-medium text-stone-600">
+                              {week.monthLabel}
+                            </span>
+                          ) : null}
+                        </div>
+                      ))}
+                    </div>
                   </div>
 
-                  <div className="flex gap-2">
-                    <div className="flex flex-col gap-[3px] text-[9px] font-mono text-stone-400 select-none shrink-0 w-5">
-                      <span className="h-2.5 sm:h-3 leading-none opacity-0">Sun</span>
-                      <span className="h-2.5 sm:h-3 leading-none flex items-center">Mon</span>
-                      <span className="h-2.5 sm:h-3 leading-none opacity-0">Tue</span>
-                      <span className="h-2.5 sm:h-3 leading-none flex items-center">Wed</span>
-                      <span className="h-2.5 sm:h-3 leading-none opacity-0">Thu</span>
-                      <span className="h-2.5 sm:h-3 leading-none flex items-center">Fri</span>
-                      <span className="h-2.5 sm:h-3 leading-none opacity-0">Sat</span>
+                  {/* Day Squares and Labels */}
+                  <div className="grid grid-cols-[20px_1fr] sm:grid-cols-[24px_1fr] gap-2 items-center">
+                    <div className="flex flex-col gap-[3px] text-[9px] font-mono text-stone-400 select-none w-full">
+                      {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((dayName, idx) => (
+                        <div key={dayName} className="aspect-square flex items-center">
+                          <span className={idx % 2 === 1 ? 'opacity-100' : 'opacity-0'}>{dayName}</span>
+                        </div>
+                      ))}
                     </div>
 
-                    <div className="flex gap-[3px] flex-1">
+                    <div
+                      className="w-full grid"
+                      style={{
+                        gridTemplateColumns: `repeat(${githubData.heatmapWeeks.length}, minmax(0, 1fr))`,
+                        gap: '3px',
+                      }}
+                    >
                       {githubData.heatmapWeeks.map((week, wIdx) => (
-                        <div key={wIdx} className="flex flex-col gap-[3px] shrink-0">
+                        <div key={wIdx} className="flex flex-col gap-[3px] w-full">
                           {week.days.map((day, dIdx) => {
                             const cellColor = {
                               0: 'bg-[#ebedf0] border border-[#d0d7de] hover:border-stone-400',
@@ -489,8 +504,14 @@ export function MemberPortfolioTemplate({ member, githubData }: TemplateProps) {
                             return (
                               <div
                                 key={dIdx}
-                                title={`${day.count} contribution${day.count === 1 ? '' : 's'} on ${day.formattedDate || day.date}`}
-                                className={`size-2.5 sm:size-3 rounded-[2px] ${cellColor} transition-transform hover:scale-125 cursor-pointer`}
+                                title={
+                                  day.date
+                                    ? `${day.count} contribution${day.count === 1 ? '' : 's'} on ${day.formattedDate || day.date}`
+                                    : ''
+                                }
+                                className={`w-full aspect-square rounded-[2px] ${
+                                  day.date ? cellColor : 'bg-transparent border-0'
+                                } transition-transform hover:scale-125 cursor-pointer`}
                               />
                             );
                           })}
