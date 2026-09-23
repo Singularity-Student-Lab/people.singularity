@@ -16,6 +16,8 @@ import {
   Layers,
   Quote,
   Check,
+  X,
+  Loader2,
 } from 'lucide-react';
 import { GithubIcon } from '@/components/icons';
 import { PortfolioMemberProps } from '@/components/portfolio/MemberPortfolioTemplate';
@@ -329,7 +331,23 @@ export function MemberDashboardClient({ initialMember, allSkills }: MemberDashbo
     }
   };
 
-  // 7. Curated Skills Toggling
+  // 7. Curated Skills Toggling & Custom Skill Addition
+  const [catalogSkills, setCatalogSkills] = useState<SkillCatalogItem[]>(() => {
+    const map = new Map<string, SkillCatalogItem>();
+    allSkills.forEach((s) => map.set(s.id, s));
+    initialMember.skills.forEach((ms) => {
+      if (ms.skill && !map.has(ms.skill.id)) {
+        map.set(ms.skill.id, ms.skill);
+      }
+    });
+    return Array.from(map.values());
+  });
+
+  const [addingOtherCat, setAddingOtherCat] = useState<string | null>(null);
+  const [otherSkillName, setOtherSkillName] = useState('');
+  const [addingOtherLoading, setAddingOtherLoading] = useState(false);
+  const [otherError, setOtherError] = useState<string | null>(null);
+
   const activeSkillIds = new Set(member.skills.map((s) => s.skill.id));
 
   const toggleSkill = async (skillItem: SkillCatalogItem) => {
@@ -356,6 +374,62 @@ export function MemberDashboardClient({ initialMember, allSkills }: MemberDashbo
       });
     } catch {
       setStatusMessage({ type: 'error', text: 'Failed to synchronize skills.' });
+    }
+  };
+
+  const handleAddOtherSkill = async (category: string) => {
+    const trimmed = otherSkillName.trim();
+    if (!trimmed) return;
+    if (trimmed.length < 2) {
+      setOtherError('Skill name must be at least 2 characters');
+      return;
+    }
+    if (trimmed.length > 50) {
+      setOtherError('Skill name is too long (max 50 chars)');
+      return;
+    }
+
+    setAddingOtherLoading(true);
+    setOtherError(null);
+
+    try {
+      const res = await fetch('/api/member/skills', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: trimmed, category }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        setOtherError(data.error || 'Failed to add skill');
+        setAddingOtherLoading(false);
+        return;
+      }
+
+      const newSkill: SkillCatalogItem = data.skill;
+
+      // Add to catalog if not already there
+      setCatalogSkills((prev) => {
+        if (prev.some((s) => s.id === newSkill.id)) return prev;
+        return [...prev, newSkill];
+      });
+
+      // Attach to member skills if not already attached
+      setMember((prev) => {
+        if (prev.skills.some((s) => s.skill.id === newSkill.id)) return prev;
+        return {
+          ...prev,
+          skills: [...prev.skills, { skill: newSkill, sortOrder: prev.skills.length }],
+        };
+      });
+
+      setStatusMessage({ type: 'success', text: `Added "${newSkill.name}" to competencies.` });
+      setOtherSkillName('');
+      setAddingOtherCat(null);
+    } catch {
+      setOtherError('Network error while adding skill. Please try again.');
+    } finally {
+      setAddingOtherLoading(false);
     }
   };
 
@@ -1115,7 +1189,7 @@ export function MemberDashboardClient({ initialMember, allSkills }: MemberDashbo
 
           <div className="space-y-6">
             {['CORE_LANGUAGES', 'FRAMEWORKS_LIBRARIES', 'SYSTEMS_INFRA', 'AI_ML', 'TOOLS_DEV'].map((cat) => {
-              const catSkills = allSkills.filter((s) => s.category === cat);
+              const catSkills = catalogSkills.filter((s) => s.category === cat);
               const catTitles: Record<string, string> = {
                 CORE_LANGUAGES: 'Languages & Core Systems',
                 FRAMEWORKS_LIBRARIES: 'Frameworks & Runtimes',
@@ -1124,12 +1198,20 @@ export function MemberDashboardClient({ initialMember, allSkills }: MemberDashbo
                 TOOLS_DEV: 'Tooling & Telemetry',
               };
 
+              const catPlaceholders: Record<string, string> = {
+                CORE_LANGUAGES: 'e.g. Zig, Mojo, Scala...',
+                FRAMEWORKS_LIBRARIES: 'e.g. Svelte, Angular, Spring...',
+                SYSTEMS_INFRA: 'e.g. Kafka, Nomad, Terraform...',
+                AI_ML: 'e.g. LangChain, Whisper, JAX...',
+                TOOLS_DEV: 'e.g. Neovim, Grafana, Ansible...',
+              };
+
               return (
                 <div key={cat} className="space-y-2.5">
                   <span className="text-xs font-mono uppercase tracking-wider text-stone-600 block">
                     {catTitles[cat] || cat}
                   </span>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     {catSkills.map((skill) => {
                       const isSelected = activeSkillIds.has(skill.id);
                       return (
@@ -1148,6 +1230,81 @@ export function MemberDashboardClient({ initialMember, allSkills }: MemberDashbo
                         </button>
                       );
                     })}
+
+                    {/* Inline "+ Other" custom skill creator */}
+                    {addingOtherCat === cat ? (
+                      <div className="inline-flex flex-col gap-1">
+                        <div className="inline-flex items-center gap-1.5">
+                          <input
+                            type="text"
+                            autoFocus
+                            placeholder={catPlaceholders[cat] || 'Custom skill...'}
+                            value={otherSkillName}
+                            onChange={(e) => {
+                              setOtherSkillName(e.target.value);
+                              if (otherError) setOtherError(null);
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                e.preventDefault();
+                                handleAddOtherSkill(cat);
+                              } else if (e.key === 'Escape') {
+                                setAddingOtherCat(null);
+                                setOtherSkillName('');
+                                setOtherError(null);
+                              }
+                            }}
+                            disabled={addingOtherLoading}
+                            className="px-2.5 py-1 text-xs font-mono bg-white border border-stone-900 text-stone-900 placeholder:text-stone-400 focus:outline-hidden w-44 sm:w-56"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => handleAddOtherSkill(cat)}
+                            disabled={addingOtherLoading || !otherSkillName.trim()}
+                            className="px-2.5 py-1 text-xs font-mono bg-stone-900 text-white hover:bg-stone-800 disabled:opacity-50 cursor-pointer inline-flex items-center gap-1"
+                          >
+                            {addingOtherLoading ? (
+                              <Loader2 className="w-3 h-3 animate-spin" />
+                            ) : (
+                              <span>Add</span>
+                            )}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setAddingOtherCat(null);
+                              setOtherSkillName('');
+                              setOtherError(null);
+                            }}
+                            disabled={addingOtherLoading}
+                            className="p-1 text-xs font-mono text-stone-500 hover:text-stone-900 hover:bg-stone-100 border border-stone-300 cursor-pointer"
+                            title="Cancel"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                        {otherError && (
+                          <div className="text-[11px] font-mono text-rose-600 flex items-center gap-1">
+                            <AlertCircle className="w-3 h-3 inline shrink-0" />
+                            <span>{otherError}</span>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setAddingOtherCat(cat);
+                          setOtherSkillName('');
+                          setOtherError(null);
+                        }}
+                        className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-mono transition-colors cursor-pointer border border-dashed border-stone-400 bg-stone-50/60 text-stone-600 hover:border-stone-900 hover:text-stone-900 hover:bg-white"
+                        title={`Add other ${catTitles[cat] || 'skill'}`}
+                      >
+                        <Plus className="w-3 h-3" />
+                        <span>Other</span>
+                      </button>
+                    )}
                   </div>
                 </div>
               );

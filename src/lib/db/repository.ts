@@ -677,6 +677,86 @@ export const db = {
     return store.skills;
   },
 
+  async findOrCreateSkill(
+    name: string,
+    category: 'CORE_LANGUAGES' | 'FRAMEWORKS_LIBRARIES' | 'SYSTEMS_INFRA' | 'AI_ML' | 'TOOLS_DEV'
+  ) {
+    const trimmed = name.trim();
+    const usePrisma = await checkPrisma();
+    if (usePrisma) {
+      const existing = await prisma.skill.findFirst({
+        where: {
+          name: {
+            equals: trimmed,
+            mode: 'insensitive',
+          },
+        },
+      });
+      if (existing) {
+        return existing;
+      }
+      return prisma.skill.create({
+        data: {
+          name: trimmed,
+          category,
+        },
+      });
+    }
+
+    const store = loadLocalStore();
+    const existing = store.skills.find(
+      (s) => s.name.toLowerCase() === trimmed.toLowerCase()
+    );
+    if (existing) {
+      return existing;
+    }
+
+    const newSkill: SeedSkill = {
+      id: `skill-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+      name: trimmed,
+      category,
+    };
+    store.skills.push(newSkill);
+    saveLocalStore(store);
+    return newSkill;
+  },
+
+  async attachMemberSkill(memberId: string, skillId: string) {
+    const usePrisma = await checkPrisma();
+    if (usePrisma) {
+      const exists = await prisma.memberSkill.findUnique({
+        where: {
+          memberId_skillId: { memberId, skillId },
+        },
+      });
+      if (!exists) {
+        const count = await prisma.memberSkill.count({ where: { memberId } });
+        await prisma.memberSkill.create({
+          data: {
+            memberId,
+            skillId,
+            sortOrder: count,
+          },
+        });
+      }
+      return;
+    }
+
+    const store = loadLocalStore();
+    const exists = store.memberSkills.some(
+      (ms) => ms.memberId === memberId && ms.skillId === skillId
+    );
+    if (!exists) {
+      const count = store.memberSkills.filter((ms) => ms.memberId === memberId).length;
+      store.memberSkills.push({
+        memberId,
+        skillId,
+        sortOrder: count,
+      });
+      saveLocalStore(store);
+    }
+  },
+
   async updateMemberSkills(memberId: string, skillIds: string[]) {
     const usePrisma = await checkPrisma();
     if (usePrisma) {
